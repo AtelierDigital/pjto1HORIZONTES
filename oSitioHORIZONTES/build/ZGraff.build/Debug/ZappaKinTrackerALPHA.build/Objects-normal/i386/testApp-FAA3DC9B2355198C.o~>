@@ -1,0 +1,178 @@
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnTypes.h:29,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:28,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOS.h:453: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOS.h:456: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOS.h:465: warning: 'warning' attribute directive ignored
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:29,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:125: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:149: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:173: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:194: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:219: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:348: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:365: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:403: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnContext.h:424: warning: 'warning' attribute directive ignored
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:32,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnPrdNodeInfo.h:115: warning: 'warning' attribute directive ignored
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:34,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:72: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:1910: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:1917: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:2060: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:2067: warning: 'warning' attribute directive ignored
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:35,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:1070: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:1071: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4086: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4304: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4332: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4626: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4654: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5497: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5525: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5553: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5591: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5683: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5758: warning: 'warning' attribute directive ignored
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnLog.h:30,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:36,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnDump.h:163: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnDump.h:164: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnDump.h:165: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnDump.h:166: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnDump.h:167: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnDump.h:168: warning: 'warning' attribute directive ignored
+In file included from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:36,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.h:6,
+                 from /Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnLog.h:428: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/../../../addons/ofxOpenNI/include/openni/XnLog.h:429: warning: 'warning' attribute directive ignored
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:679: error: no 'void testApp::setupGraff()' member function declared in class 'testApp'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'void testApp::setupGraff()':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:686: error: 'buttonSize' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:687: error: 'buttonTicks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:691: error: 'cursorVisible' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:692: error: 'ticks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:693: error: 'mouseIsDown' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:694: error: 'breakWait' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:695: error: 'lastMouseUpTime' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:697: error: 'resetAndShuffle' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:699: error: 'drips_max' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:700: error: 'canvasDirty' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:702: error: 'blots' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:723: error: 'stars' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: At global scope:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:747: error: no 'void testApp::resetAndShuffle()' member function declared in class 'testApp'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'void testApp::resetAndShuffle()':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:749: error: 'paths' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:751: error: 'JPath' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:751: error: expected primary-expression before ')' token
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:751: error: expected `;' before 'paths'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:756: error: 'rgb' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:757: error: 'rnd' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:763: error: 'killAllDrops' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:764: error: 'canvasDirty' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: At global scope:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:767: error: no 'void testApp::killAllDrops()' member function declared in class 'testApp'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'void testApp::killAllDrops()':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:769: error: 'drips' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:771: error: 'Drip' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:771: error: expected primary-expression before ')' token
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:771: error: expected `;' before 'drips'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: At global scope:
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:776: error: no 'void testApp::drawGraff()' member function declared in class 'testApp'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'void testApp::drawGraff()':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:782: error: 'mouseIsDown' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:783: error: 'paths' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:783: error: expected type-specifier before 'JPoint'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:783: error: expected `)' before 'JPoint'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:787: error: 'JPath' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:787: error: template argument 1 is invalid
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:787: error: template argument 2 is invalid
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:787: error: expected initializer before 'it'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:788: error: 'JPath' cannot appear in a constant-expression
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:788: error: template argument 1 is invalid
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:788: error: template argument 2 is invalid
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:788: error: expected initializer before 'fit'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:791: error: 'it' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:791: error: 'paths' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:792: error: expected `;' before 'p'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:793: error: 'p' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:796: error: 'rgb' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:796: error: 'rnd' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:806: error: expected `;' before 'p'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:807: error: 'p' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:809: error: 'rgb' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:814: error: 'rnd' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:820: error: 'JPoint' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:827: error: 'rnd' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:841: error: 'fit' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:846: error: 'JColor' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:846: error: expected `;' before 'c1'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:850: error: expected `;' before 'c2'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:856: error: 'rnd' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:861: error: 'c1' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:862: error: 'blots' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:864: error: 'c1' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:865: error: 'stars' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:876: error: 'c2' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:877: error: 'blots' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:879: error: 'c2' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:880: error: 'stars' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:889: error: 'Drip' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:889: error: template argument 1 is invalid
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:889: error: template argument 2 is invalid
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:889: error: expected initializer before 'drip_it'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:890: error: 'drip_it' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:890: error: 'drips' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:900: error: 'drips_max' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:905: error: 'JColor' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:905: error: expected `;' before 'c'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:906: error: 'canvasDirty' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:906: error: 'mouseIsDown' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:906: error: 'c' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:907: error: expected type-specifier before 'Drip'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:907: error: expected `)' before 'Drip'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:915: error: 'ticks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:915: error: 'buttonTicks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:922: error: 'buttonSize' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:928: error: 'ticks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'virtual void testApp::keyPressed(int)':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1614: error: 'cursorVisible' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'virtual void testApp::mousePressed(int, int, int)':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1832: error: 'buttonSize' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1834: error: 'buttonTicks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1834: error: 'ticks' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1838: error: 'paths' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1838: error: expected type-specifier before 'JPath'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1838: error: expected `)' before 'JPath'
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1839: error: 'mouseIsDown' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1840: error: 'canvasDirty' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp: In member function 'virtual void testApp::mouseReleased(int, int, int)':
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1850: error: 'mouseIsDown' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1851: error: 'lastMouseUpTime' was not declared in this scope
+/Users/kauecosta/CODE/of_0071_osx_release/_zappa/kinDEV/ZGraff/src/testApp.cpp:1851: error: 'ticks' was not declared in this scope

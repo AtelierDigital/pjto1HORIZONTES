@@ -1,0 +1,6 @@
+ofxControlPanel
+ofxOpenNI
+ofxOsc
+ofxSyphon
+ofxTouchOsc
+ofxXmlSettings

@@ -1,0 +1,33 @@
+<StartKinect>
+    <val_0>1.000000000</val_0>
+</StartKinect>
+<DebugKinect>
+    <val_0>0.000000000</val_0>
+</DebugKinect>
+<IR>
+    <val_0>0.000000000</val_0>
+</IR>
+<KinectSource>
+    <val_0>0.000000000</val_0>
+</KinectSource>
+<NearThreshold>
+    <val_0>500.000000000</val_0>
+</NearThreshold>
+<FarThreshold>
+    <val_0>1000.000000000</val_0>
+</FarThreshold>
+<FilterFactor>
+    <val_0>0.100000001</val_0>
+</FilterFactor>
+<TrackingHands>
+    <val_0>1.000000000</val_0>
+</TrackingHands>
+<TrackingUser>
+    <val_0>1.000000000</val_0>
+</TrackingUser>
+<KinectDraw>
+    <val_0>1.000000000</val_0>
+</KinectDraw>
+<FadeEffect>
+    <val_0>255.000000000</val_0>
+</FadeEffect>
