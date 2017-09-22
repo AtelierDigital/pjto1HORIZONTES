@@ -61,7 +61,7 @@ void Blob::update(int num, float tx, float ty, float _pX, float _pY){
     
     
 //    for (int i=0; i<w; i++) bx[i] = int(sqrt(x-i));
-    
+//
 //    for (int i=0; i<h; i++) by[i] = int(sqrt(y-i));
     
     

@@ -43,10 +43,7 @@ void ofApp::setup() {
     
     //setup UI
     setupControlPanel();
-    
-    
-    videoCor.loadMovie("videoCOR.mov");
-    videoPB.loadMovie("videoPB.mov");
+
     
     setupShaders();
     
@@ -278,6 +275,8 @@ void ofApp::keyPressed(int key){
         }
     
     
+    
+    cout << "frame rate:" << ofGetFrameRate() << "   mouseX:" << ofGetMouseX() << endl;
 
 }
 //--------------------------------------------------------------
@@ -416,10 +415,15 @@ void ofApp::updateShaders(){
     
     
     maskFbo.begin();
-
+    
     ofEnableAlphaBlending();
     
-    ofSetColor(255,255,255, geti("FadeEffect"));
+    ofSetColor(255,255,255, 5); //geti("FadeEffect"));
+    
+    
+    
+    
+    
     
     
     if(isKinectOn){
@@ -434,21 +438,91 @@ void ofApp::updateShaders(){
 
     }
     
-    //ofBackground(0);
+    ofSetColor(0);
+    ofRectangle(0,0,ofGetWidth()/2, ofGetHeight());
     
     
-    for(int i = 100; i > 0; i--){
+    for(int i = 10; i > 0; i--){
         
         float factor = i;
         
         ofPushStyle();
+        
+        
+        
+        ofSetColor(0,100);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
+        
+        
+        
+        
         ofSetColor(255, (int)5);
         
-        ofEllipse(b[0].getx(),b[0].gety(), 200-factor,200-factor);
-        
-        ofEllipse(b[1].getx(),b[1].gety(), 200-factor,200-factor);
-        
+//        ofEllipse(b[0].getx(),b[0].gety(), 200-factor,200-factor);
 //        
+//        ofEllipse(b[1].getx(),b[1].gety(), 200-factor,200-factor);
+
+        
+        ofEllipse(ofGetMouseX(),ofGetMouseY(), ofRandom(200),ofRandom(200));
+
+        
+        
+        
+        
 //        ofEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
 //        ofEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
         
@@ -457,10 +531,10 @@ void ofApp::updateShaders(){
         
     }
     
+    
+   // maskFbo.readToPixels(metaPixels);
+    
     /*
-    maskFbo.readToPixels(metaPixels);
-    
-    
     int w = 1920;
     int h = 1080;
     
@@ -484,10 +558,10 @@ void ofApp::updateShaders(){
     }
     
     ofTexture texture1;
-    
-    
-    texture1.loadData(metaPixels);
     */
+    
+    //texture1.loadData(metaPixels);
+    
     //texture1.draw(0,0);
     
     maskFbo.end();
