@@ -50,9 +50,9 @@ void ofApp::setup() {
     //setb("StartKinect", true);
     ofHideCursor();
     
-    layer1.loadImage("fundos/Azul1.jpg");
-    layer2.loadImage("fundos/Amarelo2.jpg");
-    layer3.loadImage("fundos/teste.jpg");
+    layer1.load("fundos/Azul1.jpg");
+    layer2.load("fundos/Amarelo2.jpg");
+    layer3.load("fundos/teste.jpg");
     
     
     int w = 1920;
@@ -170,12 +170,18 @@ void ofApp::draw(){
     
     
     layer1.draw(0,0);
+
     
-    fbo.draw(0,0);
+    glEnable(GL_BLEND_SRC_ALPHA);
+    
+    fbo1.draw(0,0);
     
     
     
     glEnable(GL_BLEND_SRC_ALPHA);
+
+    
+    fbo2.draw(0,0);
     
 //    if(isKinectOn){
 //        
@@ -310,15 +316,17 @@ void ofApp::setupShaders(){
     
     ofEnableAlphaBlending();
     
-    srcImg.load("A.jpg");
-    dstImg.load("B.jpg");
     brushImg.load("brush.png");
     
     int width = ofGetWidth();
     int height = ofGetHeight();
     
-    maskFbo.allocate(width,height, GL_RGBA);
-    fbo.allocate(width,height, GL_RGBA);
+    maskFbo1.allocate(width,height, GL_RGBA);
+    fbo1.allocate(width,height, GL_RGBA);
+    maskFbo2.allocate(width,height, GL_RGBA);
+    fbo2.allocate(width,height, GL_RGBA);
+    maskFbo3.allocate(width,height, GL_RGBA);
+    fbo3.allocate(width,height, GL_RGBA);
     
     // There are 3 of ways of loading a shader:
     //
@@ -394,14 +402,29 @@ void ofApp::setupShaders(){
     
     // Let�s clear the FBO�s
     // otherwise it will bring some junk with it from the memory    
-    maskFbo.begin();
+    maskFbo1.begin();
     ofClear(0,0,0,0);
-    maskFbo.end();
+    maskFbo1.end();
     
-    fbo.begin();
+    fbo1.begin();
     ofClear(0,0,0,255);
-    fbo.end();
+    fbo1.end();
+
+    maskFbo2.begin();
+    ofClear(0,0,0,0);
+    maskFbo2.end();
     
+    fbo2.begin();
+    ofClear(0,0,0,255);
+    fbo2.end();
+    
+    maskFbo3.begin();
+    ofClear(0,0,0,0);
+    maskFbo3.end();
+    
+    fbo3.begin();
+    ofClear(0,0,0,255);
+    fbo3.end();
     
 }
 
@@ -411,35 +434,27 @@ void ofApp::updateShaders(){
     // MASK (frame buffer object)
     //
     
-    ofSetCircleResolution(12);
+    ofSetCircleResolution(16);
     
     
-    maskFbo.begin();
+    maskFbo1.begin();
     
     ofEnableAlphaBlending();
     
     ofSetColor(255,255,255, 5); //geti("FadeEffect"));
     
-    
-    
-    
-    
-    
-    
     if(isKinectOn){
 
         //chamar kaoxNI updateNI
         
-        
-        //// 
-        
+        ////
 //        mask = kin.getUserMask();
 //        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
 
     }
     
-    ofSetColor(0);
-    ofRectangle(0,0,ofGetWidth()/2, ofGetHeight());
+    ofSetColor(0,5);
+    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
     
     
     for(int i = 10; i > 0; i--){
@@ -448,83 +463,15 @@ void ofApp::updateShaders(){
         
         ofPushStyle();
         
+        ofSetColor(255, (int)25);
         
+//        ofDrawEllipse(b[0].getx(),b[0].gety(), 200-factor,200-factor);
+//        ofDrawEllipse(b[1].getx(),b[1].gety(), 200-factor,200-factor);
         
-        ofSetColor(0,100);
+        ofDrawEllipse(ofGetMouseX(),ofGetMouseY(), ofRandom(200),ofRandom(200));
         
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 3,8);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        ofEllipse(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()), 5,3);
-        
-        
-        
-        
-        ofSetColor(255, (int)5);
-        
-//        ofEllipse(b[0].getx(),b[0].gety(), 200-factor,200-factor);
-//        
-//        ofEllipse(b[1].getx(),b[1].gety(), 200-factor,200-factor);
-
-        
-        ofEllipse(ofGetMouseX(),ofGetMouseY(), ofRandom(200),ofRandom(200));
-
-        
-        
-        
-        
-//        ofEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
-//        ofEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
+//        ofDrawEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
+//        ofDrawEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
         
         ofPopStyle();
         
@@ -561,27 +508,70 @@ void ofApp::updateShaders(){
     */
     
     //texture1.loadData(metaPixels);
-    
     //texture1.draw(0,0);
+    maskFbo1.end();
     
-    maskFbo.end();
+    
     
     // HERE the shader-masking happends
     //
-    fbo.begin();
+    fbo1.begin();
     // Cleaning everthing with alpha mask on 0 in order to make it transparent for default
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo1.getTextureReference(), 1 );
+    
+    //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
+    
+    layer3.draw(0,0);
+//    srcImg.draw(0,0);
+    
+    shader.end();
+    fbo1.end();
+    
+    
+    
+    maskFbo2.begin();
+    
+    ofEnableAlphaBlending();
+    
+    
+    ofSetColor(0,25);
+    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+    
+    
+    float def = 120;
+    
+    for(int i = 0; i < def; i++){
+        
+        float px = ofGetWidth()/def*i;
+        float fx = ofDist(px, 0, ofGetMouseX(), 0)/ofGetWidth() * ofGetWidth()/def;
+        
+        ofSetColor(255, 255, 255, 20);
+        ofDrawRectangle(px, 0, fx*2, ofGetHeight());
+        
+    }
+  
+    maskFbo2.end();
+    
+    
+    
+    // HERE the shader-masking happends
+    //
+    fbo2.begin();
+    // Cleaning everthing with alpha mask on 0 in order to make it transparent for default
+    ofClear(0, 0, 0, 255-geti("FadeEffect"));
+    
+    shader.begin();
+    shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
     
     //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
     
     layer2.draw(0,0);
-    
-//    srcImg.draw(0,0);
+    //    srcImg.draw(0,0);
     
     shader.end();
-    fbo.end();
+    fbo2.end();
     
 }

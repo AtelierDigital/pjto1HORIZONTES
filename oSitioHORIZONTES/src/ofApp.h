@@ -101,8 +101,8 @@ public:
     ofImage     dstImg;
     ofImage     brushImg;
     
-    ofFbo       maskFbo;
-    ofFbo       fbo;
+    ofFbo       maskFbo1, maskFbo2, maskFbo3;
+    ofFbo       fbo1, fbo2, fbo3;
     
     ofShader    shader;
     
