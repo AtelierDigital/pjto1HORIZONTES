@@ -47,7 +47,7 @@ void ofApp::setup() {
     
     setupShaders();
     
-    setb("StartKinect", true);
+    //setb("StartKinect", true);
     ofHideCursor();
     
     layer1.load("fundos/Azul1.jpg");
@@ -115,106 +115,14 @@ void ofApp::update(){
     
     if(getb("StartKinect")){
         
-        //  SimpleOPENNI
-        
-        //        kin.isInfrared = getb("IR");
-        //        kin.startKinect(geti("KinectSource"));
-        
-        
-        //  ofxKinect
-        
-        // enable depth->video image calibration
-        kinect.setRegistration(true);
-        
-        kinect.init();
-        //kinect.init(true); // shows infrared instead of RGB video image
-        //kinect.init(false, false); // disable video image (faster fps)
-        
-        kinect.open();		// opens first available kinect
-        //kinect.open(1);	// open a kinect by id, starting with 0 (sorted by serial # lexicographically))
-        //kinect.open("A00362A08602047A");	// open a kinect using it's unique serial #
-        
-        // print the intrinsic IR sensor values
-        if(kinect.isConnected()) {
-//            ofLogNotice() << "sensor-emitter dist: " << kinect.getSensorEmitterDistance() << "cm";
-//            ofLogNotice() << "sensor-camera dist:  " << kinect.getSensorCameraDistance() << "cm";
-//            ofLogNotice() << "zero plane pixel size: " << kinect.getZeroPlanePixelSize() << "mm";
-//            ofLogNotice() << "zero plane dist: " << kinect.getZeroPlaneDistance() << "mm";
-        }
-        
-        //  [Brizo] Usando OpenCV
-        
-        grayImage.allocate(kinect.width, kinect.height);
-        //grayThreshNear.allocate(kinect.width, kinect.height);
-        //grayThreshFar.allocate(kinect.width, kinect.height);
-        
-        mask.allocate(kinect.width, kinect.height, OF_IMAGE_GRAYSCALE);
-        
-        isKinectOn = true;
-        
-        
+//        kin.isInfrared = getb("IR");
+//        kin.startKinect(geti("KinectSource"));
+       
+//        isKinectOn = true;
         setb("StartKinect", false);
     }
     
-    //
-    //  [Brizo] Armazenando a depth image, a espelhando e descartando tudo que esta fora de near e far
-    
-    kinect.setDepthClipping((float)getf("NearThreshold"), (float)getf("FarThreshold"));
-    
-//    ofLogNotice() << "NearThreshold: " << kinect.getNearClipping();
-//    ofLogNotice() << "FarThreshold: "  << kinect.getFarClipping();
-    
-    kinect.update();
-    
-    // there is a new frame and we are connected
-    if(kinect.isFrameNew()) {
-        
-        // Lendo e espelhando a depth image do kinect
-        grayImage.setFromPixels(kinect.getDepthPixels());
-        grayImage.mirror(false, true);
-        
-        /*
-        // we do two thresholds - one for the far plane and one for the near plane
-        // we then do a cvAnd to get the pixels which are a union of the two thresholds
-        if(bThreshWithOpenCV) {
-            grayThreshNear = grayImage;
-            grayThreshFar = grayImage;
-            //grayThreshNear.threshold(kinect.getNearClipping(), true);
-            //grayThreshFar.threshold(kinect.getFarClipping());
-            grayThreshNear.threshold(230, true);    //  hard-coding so para testes, usando o kinect bem perto de mim
-            grayThreshFar.threshold(70, trye); //  hard-coding so para testes, usando o kinect bem perto de mim
-            cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImage.getCvImage(), NULL);
-        } else {*/
-            
-            // Estou mantendo os valores intermediarios ao inves de satura-los (TODO - vamos saturar ou nao?)
-            ofPixels & pix = grayImage.getPixels();
-            int numPixels = pix.size();
-            for(int i = 0; i < numPixels; i++) {
-                //if(pix[i] > kinect.getNearClipping() || pix[i] < (kinect.getFarClipping())) {
-                if(pix[i] > 230 || pix[i] < 70) {    //  hard-coding so para testes, usando o kinect bem perto de mim
-                    pix[i] = 0;
-                }
-            }
-        //}
-        
-        //  Comentado - Nao estamos mais editando a grayImage...
-        //grayImage.flagImageChanged(); // updateTexture(); ?
-        
-        
-        //  Convertendo para ofImage
-        mask.setFromPixels(grayImage.getPixels());
-        mask.update();
-
-        
-        // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
-        // also, find holes is set to true so we will get interior contours as well....
-        //contourFinder.findContours(grayImage, 10, (kinect.width*kinect.height)/2, 20, false);
-    }
-    
-    //
-    //  SimpleOpenNI
-    
-    /*if(isKinectOn)
+    if(isKinectOn)
     {
 //        kin.filterFactor = getf("FilterFactor");
 //        kin.nearThreshold = geti("NearThreshold");
@@ -231,7 +139,7 @@ void ofApp::update(){
 	if(isKinectOn){
         //chamar kaoxNI updateNI
 //        kin.updateNI();
-	}*/
+	}
 	
 	counter = counter + 0.033f;
     
@@ -275,17 +183,14 @@ void ofApp::draw(){
     
     fbo2.draw(0,0);
     
-    if(isKinectOn){
-        
-        //chamar kaoxNI updateNI
+//    if(isKinectOn){
+//        
+//        //chamar kaoxNI updateNI
 //        mask = kin.getUserMask();
 //        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
-        
-        //
-        //  [Brizo] ofxKinect + OpenCV
-
-        //mask.draw(0, 0, ofGetWidth(), ofGetHeight());
-    }
+//        
+//    }
+    
 	
 	ofDisableAlphaBlending();
 
@@ -536,10 +441,7 @@ void ofApp::updateShaders(){
     
     ofEnableAlphaBlending();
     
-    //ofSetColor(0,5);
-    //ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());                             NOTE - RETANGULO AQUI?
-    
-    ofSetColor(255,255,255, 10); //geti("FadeEffect"));
+    ofSetColor(255,255,255, 5); //geti("FadeEffect"));
     
     if(isKinectOn){
 
@@ -548,15 +450,11 @@ void ofApp::updateShaders(){
         ////
 //        mask = kin.getUserMask();
 //        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
-        
-        //
-        //  [Brizo] ofxKinect + OpenCV
-        
-        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
+
     }
     
-    //ofSetColor(0,5);                                                              OU AQUI?
-    //ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+    ofSetColor(0,5);
+    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
     
     
     for(int i = 10; i > 0; i--){
@@ -622,7 +520,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo1.getTexture(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo1.getTextureReference(), 1 );
     
     //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
     
@@ -639,7 +537,7 @@ void ofApp::updateShaders(){
     ofEnableAlphaBlending();
     
     
-    ofSetColor(0,60);
+    ofSetColor(0,25);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
     
     
@@ -666,7 +564,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo2.getTexture(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
     
     //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
     

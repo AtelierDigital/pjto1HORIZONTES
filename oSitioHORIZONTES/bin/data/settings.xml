@@ -1,5 +1,5 @@
 <StartKinect>
-    <val_0>0.000000000</val_0>
+    <val_0>1.000000000</val_0>
 </StartKinect>
 <DebugKinect>
     <val_0>0.000000000</val_0>
@@ -31,6 +31,3 @@
 <FadeEffect>
     <val_0>255.000000000</val_0>
 </FadeEffect>
-<ShowPanel>
-    <val_0>1.000000000</val_0>
-</ShowPanel>

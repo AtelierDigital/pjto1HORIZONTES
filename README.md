@@ -1,19 +1,26 @@
-# pjto1HORIZONTES - com ofxKinect ao invés de OpenNI
+# pjto1HORIZONTES
 
-## TODO - integrar com a versão atual do Kaue e manter apenas 1 repositório
 
-O mesmo setup do original, mas os addons um pouco diferentes:
+Projeto Inicial // HUB
+
 
 Copie a pasta para dentro de uma pasta of0.9.8/apps/ > projeto
 
+
 Addons necessários:
 
-ofxOpenCV
 ofxControlPanel
 ofxOsc
 ofxSyphon
 ofxTouchOsc
 ofxXmlSettings
-ofxKinect
+
+?? definir qual addon para Kinect
+
+testar ofxOpenNI
+
+e 
+
+ofxKinect <-mais simples 
 
 
