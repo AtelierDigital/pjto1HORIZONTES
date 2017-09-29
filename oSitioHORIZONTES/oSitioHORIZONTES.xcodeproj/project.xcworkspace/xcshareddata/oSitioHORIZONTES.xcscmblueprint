@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "561DBA788C32F8435EA4D86F023E01CF00D9146B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "561DBA788C32F8435EA4D86F023E01CF00D9146B" : 0,
+    "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : 0,
+    "E1D7CE75067CCCDCE3CA7F133D695D7FCD43174A" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C924AEE4-E2DC-4414-BF89-CCF4D847E296",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "561DBA788C32F8435EA4D86F023E01CF00D9146B" : "pjto1HORIZONTES\/",
+    "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : "..\/addons\/ofxSyphon",
+    "E1D7CE75067CCCDCE3CA7F133D695D7FCD43174A" : "..\/addons\/ofxTouchOsc"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "oSitioHORIZONTES",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "oSitioHORIZONTES\/oSitioHORIZONTES.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AtelierDigital\/pjto1HORIZONTES.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "561DBA788C32F8435EA4D86F023E01CF00D9146B"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/genekogan\/ofxTouchOsc.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E1D7CE75067CCCDCE3CA7F133D695D7FCD43174A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/astellato\/ofxSyphon.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F4CCB893AFADB97238A965FD2F28717F1CAAE613"
+    }
+  ]
+}

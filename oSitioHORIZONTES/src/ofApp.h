@@ -6,6 +6,8 @@
 #include "ofxSyphon.h"
 #include "kaoxControlPanel.h"
 #include "ofxXmlSettings.h"
+#include "ofxKinect.h"
+#include "ofxOpenCV.h"
 #include <deque>
 
 #include "metaBlob.h"
@@ -75,6 +77,8 @@ public:
 
 	bool				isSendingOSC, isSendingHands, isSendingSkeleton, isDebugging; //kaox
 		
+    //  Kinect...
+    ofxKinect kinect;
 	
 //÷÷÷÷÷÷÷  Syphon:
 
@@ -120,6 +124,15 @@ public:
     
     
     ofPixels metaPixels;
+    
+    //
+    //  [Brizo] Inspired by ofxKinect's KinectExample
+    
+    ofxCvGrayscaleImage grayImage; // grayscale depth image
+    ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
+    ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
+    
+    ofxCvContourFinder contourFinder;
 };
 
 #endif
