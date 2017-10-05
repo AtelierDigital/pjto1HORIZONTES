@@ -4,31 +4,20 @@
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "ofxSyphon.h"
-#include "kaoxControlPanel.h"
 #include "ofxXmlSettings.h"
 #include <deque>
+
+
+///kaox.tv libs
+#include "kaoxControlPanel.h"
+#include "kaoxGameEngine.h"
+
 
 #include "metaBlob.h"
 
 
 #define HOST "localhost"
 #define PORT 5552
-
-//UI-Editor
-#define MOUSE_STAT_DEFAULT 0
-#define MOUSE_STAT_HOVER 1
-
-
-#define PHASE_POINT 0
-#define PHASE_RECT 1
-#define PHASE_TRIANGLE 2
-#define PHASE_STATIC_POLY 3
-#define PHASE_DYNAMIC_POLY 4
-#define PHASE_EMITTER 5
-#define PHASE_FORCE 6
-
-#define MOVEVIEW_FRAME 90
-
 
 class ofApp : public ofBaseApp{
 
@@ -120,6 +109,8 @@ public:
     
     
     ofPixels metaPixels;
+    
+    kaoxGameEngine ge;
 };
 
 #endif

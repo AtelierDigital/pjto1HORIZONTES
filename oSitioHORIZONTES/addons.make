@@ -1,5 +1,5 @@
+ofxBox2d
 ofxControlPanel
-ofxOpenNI
 ofxOsc
 ofxSyphon
 ofxTouchOsc

@@ -69,6 +69,10 @@ void ofApp::setup() {
     
     metaPixels.allocate(1920, 1080, 4);
     
+    ge.setup();
+    ge.initINTUITVdemo(20);
+    
+    
 }
 
 
@@ -151,6 +155,9 @@ void ofApp::update(){
     
     
     updateShaders();
+    
+    ge.update();
+    ge.updateBox2d();
 	
 }
 //--------------------------------------------------------------
@@ -169,7 +176,9 @@ void ofApp::draw(){
     //videoPB.draw(0, 0, ofGetWidth(), ofGetHeight());
     
     
-    layer1.draw(0,0);
+    
+    
+    layer1.draw(((-ofGetMouseX() + ofGetWidth()/2)/100)*10,0);
 
     
     glEnable(GL_BLEND_SRC_ALPHA);
@@ -180,7 +189,11 @@ void ofApp::draw(){
     
     glEnable(GL_BLEND_SRC_ALPHA);
 
+    ofSetColor(0, 0, 0, 120);
+    fbo2.draw(50,50);
     
+    
+    ofSetColor(255);
     fbo2.draw(0,0);
     
 //    if(isKinectOn){
@@ -191,9 +204,8 @@ void ofApp::draw(){
 //        
 //    }
     
-	
+    
 	ofDisableAlphaBlending();
-
     
     if(isSyphonOn) mainOutputSyphonServer.publishScreen();
 	
@@ -201,6 +213,8 @@ void ofApp::draw(){
     if(getb("ShowPanel")) ofShowCursor();
     else                  ofHideCursor();
 
+    
+    
     
     
 }
@@ -456,6 +470,10 @@ void ofApp::updateShaders(){
     ofSetColor(0,5);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
     
+
+    ofSetColor(255, 25);
+    
+    ge.drawBox2d();
     
     for(int i = 10; i > 0; i--){
         
@@ -472,18 +490,27 @@ void ofApp::updateShaders(){
         
 //        ofDrawEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
 //        ofDrawEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
+
+        
+//        for (int i=0; i <b.size(); i++) ofDrawEllipse(b[i].getx(), b[i].gety(), 100, 100);
+
         
         ofPopStyle();
-        
         
     }
     
     
-   // maskFbo.readToPixels(metaPixels);
+    
+    
+//   maskFbo1.readToPixels(metaPixels);
+    
+    
+    
+    
     
     /*
-    int w = 1920;
-    int h = 1080;
+    int w = 192;
+    int h = 108;
     
     float scale = .5;
     
@@ -505,10 +532,13 @@ void ofApp::updateShaders(){
     }
     
     ofTexture texture1;
+    
+    
+    texture1.loadData(metaPixels);
+    texture1.draw(0,0, 1920, 1080);
     */
     
-    //texture1.loadData(metaPixels);
-    //texture1.draw(0,0);
+    
     maskFbo1.end();
     
     
@@ -564,7 +594,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
+    //shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
     
     //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
     
