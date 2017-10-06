@@ -97,16 +97,16 @@ void kaoxGameEngine::setupBox2d() {
     
 	//Box2D
     gravityX = 0;			//xy
-    gravityY = 0;			//xy
+    gravityY = 0.2;			//xy
 
-    density = 3.6;			//rot
+    density = 90.6;			//rot
     bounce = 0.5;			//rot
-    friction = 0.3;			//rot
+    friction = 23.3;			//rot
     triang = 5;				//fad
 
 
     //	//forces
-    power = 9.0;			//fad
+    power = 3.0;			//fad
     atractionMode = true;		//tog	
 
 
@@ -137,7 +137,7 @@ void kaoxGameEngine::updateBox2d() {
 	box2d.update();	
 	box2d2.update();	
     
-    float minDis = ofGetMousePressed() ? 300 : 200;
+    float minDis = ofGetMousePressed() ? 30 : 20;
 	
 	//aqui adiciono forças para cada objeto box2d principal > 1 
 	
@@ -155,7 +155,7 @@ void kaoxGameEngine::updateBox2d() {
 				else boxes[i].addAttractionPoint(cursorsFounded[k], 9.0);
 			}else {
 				if(dis < minDis*2) boxes[i].addRepulsionForce(cursorsFounded[k], 9.0);
-				else boxes[i].addAttractionPoint(cursorsFounded[k], 4.0);
+				else boxes[i].addAttractionPoint(cursorsFounded[k], 1.0);
 			}
             
 		}
@@ -168,8 +168,8 @@ void kaoxGameEngine::updateBox2d() {
 			
 			float dis = cursorsFounded[k].distance(circles[i].getPosition());
 			
-			if(dis < minDis) circles[i].addRepulsionForce(cursorsFounded[k], 12.0);
-			else circles[i].addAttractionPoint(cursorsFounded[k], 7.0);
+			if(dis < minDis) circles[i].addRepulsionForce(cursorsFounded[k], 1200.0);
+			else circles[i].addAttractionPoint(cursorsFounded[k], .70);
 		}
 	}
 	
@@ -299,7 +299,6 @@ void kaoxGameEngine::drawBox2d() {
 		ofPushMatrix();
 		ofTranslate(boxes[i].getPosition().x, boxes[i].getPosition().y, 0);
 		ofRotate(boxes[i].getRotation(), 0, 0, 1);
-		drawZ(-boxes[i].getWidth(), -boxes[i].getWidth(), boxes[i].getWidth()*2.5);		
 		ofPopMatrix();
 	}
 //	ofDisableBlendMode();
@@ -341,6 +340,215 @@ void kaoxGameEngine::drawBox2d() {
 //--------------------------------------------------------------
 
 
+void kaoxGameEngine::drawEllipses() {
+    
+    
+    
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    
+    
+    ofFill();
+    
+    for(int i=0; i<circles.size(); i++) {
+		      
+        //        if (colorList.size()>0) {
+        //            ofSetColor(colorList[i%colorList.size()]);
+        //        }else{
+        //            ofSetColor(0, 0, 0);
+        //        }
+        
+        ofSetColor(circles[i].getColor());
+        
+        ofPushMatrix();
+        ofTranslate(circles[i].getPosition().x, circles[i].getPosition().y, 0);
+        ofRotate(circles[i].getRotation(), 0, 0, 1);
+        ofCircle(0,0, circles[i].getRadius());
+        ofPopMatrix();
+    }
+    
+    ofDisableBlendMode();
+    
+    
+    
+}
+//--------------------------------------------------------------
+
+void kaoxGameEngine::drawBoxes() {
+    
+    
+    
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    
+    
+    ofFill();
+    
+    
+    for(int i=0; i<boxes.size(); i++) {
+        
+        
+        if (colorList.size()>0) {
+            ofSetColor(colorList[i%colorList.size()]);
+        }else{
+            ofSetColor(0, 0, 0);
+        }
+        
+        
+        ofPushMatrix();
+        ofTranslate(boxes[i].getPosition().x, boxes[i].getPosition().y, 0);
+        ofRotate(boxes[i].getRotation(), 0, 0, 1);
+        
+        ofDrawRectangle(-boxes[i].getWidth(), -boxes[i].getHeight(), boxes[i].getWidth()*2, boxes[i].getHeight()*2);
+        
+        ofPopMatrix();
+    }
+    
+    ofDisableBlendMode();
+    
+    cout << "draw BOX : "<< boxes.size()<<endl;
+    
+    
+    
+}
+//--------------------------------------------------------------
+
+void kaoxGameEngine::drawPolys() {
+    
+    
+    
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    
+    
+    ofFill();
+    
+    
+    ofFill(); // <- OF not working here...
+    ofSetHexColor(0xFFFFFF);
+    for (int i=0; i<polys.size(); i++) {
+        polys[i].drawFill();
+        polys[i].draw();
+        polys[i].getPosition();
+    }
+    
+    
+}
+//--------------------------------------------------------------
+
+void kaoxGameEngine::initHorizontes(int num){
+    
+    
+    makeWalls();
+    
+    for (int i=0; i<num; i++) {
+        
+        float r = ofRandom(80, 30);
+
+        ofxBox2dCircle circle;
+        
+        if(i%2==0){
+            
+        circle.setPhysics(10.0, .53, 100.5);
+        circle.setup(box2d.getWorld(), 300, 300, r/2);
+        
+        circle.setColor(ofColor(255, 200));
+        circles.push_back(circle);
+        
+            
+        }
+        
+        //camada sup
+        r = ofRandom(30, 18);
+        circle.setPhysics(10.40, 0.03, 20000.2);
+        circle.setup(box2d.getWorld(), 300, 300, r/2);
+        
+        circle.setColor(ofColor(255, 152));
+        circles.push_back(circle);
+        
+        
+        
+        if(i%3==0){
+        
+        ofxBox2dRect box;
+        
+        box.setPhysics(10.0, 0.53, 10.5);
+        box.setup(box2d.getWorld(), 300, 300, ofRandom(r*6), ofRandom(r*6));
+        box.setColor(ofColor(255, 255));
+        boxes.push_back(box);
+        
+        }
+        /*
+         r = ofRandom(18, 9);
+         circle.setPhysics(1.0, 0.53, 0.3);
+         circle.setup(box2d.getWorld(), 300, 300, r/2);
+         
+         circle.setColor(ofColor(255, 52));
+         circles.push_back(circle);
+         */
+    }
+    
+    
+    colorList.push_back(ofColor(255)); //turquesa
+    colorList.push_back(ofColor(255, 152)); //verde
+    colorList.push_back(ofColor(255, 26)); //preto claro
+    
+    
+    vector<ofVec2f> poly1;
+    
+    ofVec2f pCentral = ofVec2f(ofGetWidth()/2 - ofRandom(ofGetWidth()/4), ofGetHeight()/2-ofRandom(ofGetHeight()/4));
+    
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
+
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
+
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
+
+    
+    
+    pCentral.x = ofGetWidth() - pCentral.x;
+    pCentral.y = ofGetHeight() - pCentral.y;
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
+
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
+
+    createPolyBox2D(poly1);
+
+    
+    pCentral = ofVec2f(ofGetWidth()/2 - ofRandom(ofGetWidth()/4), ofGetHeight()/2+ofRandom(ofGetHeight()/4));
+    
+    poly1.clear();
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    pCentral.x = ofGetWidth() - pCentral.x;
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    createPolyBox2D(poly1);
+    
+    
+    
+    //    makeSolidEllipse(ofGetWidth()/2, ofGetHeight()/2, ofGetHeight()/6, 0.0, 0.0, 3.0);
+    
+    // makeForce(int pt, float _power, bool _atraction){
+}
+
+
+
 void kaoxGameEngine::initDemo(int num){
     
     for (int i=0; i<num; i++) {
@@ -378,7 +586,7 @@ void kaoxGameEngine::initINTUITVdemo(int num){
 		
 		float r = ofRandom(80, 30);
 		ofxBox2dCircle circle;
-		circle.setPhysics(1.0, 0.53, 1.5);
+		circle.setPhysics(10.0, .53, 100.5);
 		circle.setup(box2d.getWorld(), 300, 300, r/2);
         
         circle.setColor(ofColor(255, 200));
@@ -386,18 +594,20 @@ void kaoxGameEngine::initINTUITVdemo(int num){
         
         //camada sup
 		r = ofRandom(30, 18);
-		circle.setPhysics(2.0, 0.03, 0.2);
+		circle.setPhysics(10.40, 0.03, 20000.2);
 		circle.setup(box2d.getWorld(), 300, 300, r/2);
         
         circle.setColor(ofColor(255, 152));
 		circles.push_back(circle);
         
+        /*
 		r = ofRandom(18, 9);
-        circle.setPhysics(5.0, 0.53, 0.3);
+        circle.setPhysics(1.0, 0.53, 0.3);
 		circle.setup(box2d.getWorld(), 300, 300, r/2);
         
         circle.setColor(ofColor(255, 52));
 		circles.push_back(circle);
+         */
 	}
     
     
@@ -506,33 +716,6 @@ vector <ofVec2f> kaoxGameEngine::loadPointsZ(float x, float y, float size) {
     
 	return pts;
 }
-//--------------------------------------------------------------
-void kaoxGameEngine::drawZ(float x, float y, float size){
-	ofSetPolyMode(OF_POLY_WINDING_NONZERO);
-	ofBeginShape();
-	ofVertex(x+(21*size/100), y+(10*size/100)); //1
-	ofVertex(x+(5*size/100), y+(27*size/100)); //1
-	ofVertex(x+(21*size/100), y+(43*size/100)); //1
-	ofVertex(x+(34*size/100), y+(43*size/100)); //1
-	
-	
-	ofVertex(x+(11*size/100), y+(66*size/100)); //2          
-	ofVertex(x+(11*size/100), y+(89*size/100)); //2          
-	
-	
-	ofVertex(x+(78*size/100), y+(89*size/100));//3
-	ofVertex(x+(94*size/100), y+(74*size/100));//3
-	ofVertex(x+(78*size/100), y+(57*size/100));//3
-	ofVertex(x+(67*size/100), y+(57*size/100));//3          
-	
-	ofVertex(x+(89*size/100), y+(35*size/100));//4       
-	ofVertex(x+(89*size/100), y+(10*size/100));//4       
-	
-	ofVertex(x+(21*size/100), y+(10*size/100)); //1
-	ofEndShape();
-}
-
-
 
 
 //--------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 //#__________________________________#//
 //#                                  #//
-//#    ZappaMAPP 0.1                 #//
+//#    KinectApp 0.1                 #//
 //#    ########################      #//
 //#    13/03/13                      #//
 //#    Kaue Costa   www.kaox.tv      #//
@@ -49,11 +49,17 @@ void ofApp::setup() {
     
     //setb("StartKinect", true);
     ofHideCursor();
+
+    layer0.load("fundos/fundos0.jpg");
+    layer1.load("fundos/fundos1.jpg");
+    layer2.load("fundos/fundos2.jpg");
+    layer3.load("fundos/fundos3.jpg");
     
-    layer1.load("fundos/Azul1.jpg");
-    layer2.load("fundos/Amarelo2.jpg");
-    layer3.load("fundos/teste.jpg");
+    layer4.load("fundos/fundos4.jpg");
+    layer5.load("fundos/fundos5.jpg");
+    layer6.load("fundos/fundos6.jpg");
     
+    brushImg.load("brush.png");
     
     int w = 1920;
     int h = 1080;
@@ -70,7 +76,7 @@ void ofApp::setup() {
     metaPixels.allocate(1920, 1080, 4);
     
     ge.setup();
-    ge.initINTUITVdemo(20);
+    ge.initHorizontes(26);
     
     
 }
@@ -171,15 +177,15 @@ void ofApp::draw(){
 
 	glDisable(GL_DEPTH_TEST);
     ofEnableAlphaBlending();
-
+    
+    ofSetColor(255);
+    
+    
+    float pllx = (-ofGetMouseX() + ofGetWidth()/2);
+    float plly = (-ofGetMouseY() + ofGetHeight()/2);
     
     //videoPB.draw(0, 0, ofGetWidth(), ofGetHeight());
-    
-    
-    
-    
-    layer1.draw(((-ofGetMouseX() + ofGetWidth()/2)/100)*10,0);
-
+    layer0.draw((pllx/100),(plly/100));
     
     glEnable(GL_BLEND_SRC_ALPHA);
     
@@ -187,14 +193,53 @@ void ofApp::draw(){
     
     
     
+    
     glEnable(GL_BLEND_SRC_ALPHA);
-
+    
     ofSetColor(0, 0, 0, 120);
-    fbo2.draw(50,50);
+    fbo4.draw(5+pllx/20.0,4+(plly/20));
     
     
     ofSetColor(255);
-    fbo2.draw(0,0);
+    fbo4.draw(-10+pllx/20.0,-10+(plly/20));
+    
+    
+    
+    glEnable(GL_BLEND_SRC_ALPHA);
+
+    ofSetColor(0, 0, 0, 120);
+    fbo2.draw(50+pllx/80.0,50+(plly/80));
+    
+    
+    ofSetColor(255);
+    fbo2.draw(0+pllx/80.0,(plly/80));
+
+    
+    
+    glEnable(GL_BLEND_SRC_ALPHA);
+    
+    ofSetColor(0, 0, 0, 120);
+    fbo3.draw(-50+pllx/50.0,40+(plly/50));
+    
+    
+    ofSetColor(255);
+    fbo3.draw(-10+pllx/50.0,-10+(plly/50));
+    
+    
+    
+    
+    glEnable(GL_BLEND_SRC_ALPHA);
+    
+    ofSetColor(0, 0, 0, 120);
+    fbo5.draw(-60+pllx/10.0,40+(plly/20));
+    
+    
+    ofSetColor(255);
+    fbo5.draw(-20+pllx/10.0,-10+(plly/20));
+    
+    
+    
+    
     
 //    if(isKinectOn){
 //        
@@ -342,6 +387,14 @@ void ofApp::setupShaders(){
     maskFbo3.allocate(width,height, GL_RGBA);
     fbo3.allocate(width,height, GL_RGBA);
     
+    maskFbo4.allocate(width,height, GL_RGBA);
+    fbo4.allocate(width,height, GL_RGBA);
+    maskFbo5.allocate(width,height, GL_RGBA);
+    fbo5.allocate(width,height, GL_RGBA);
+    maskFbo6.allocate(width,height, GL_RGBA);
+    fbo6.allocate(width,height, GL_RGBA);
+    
+    
     // There are 3 of ways of loading a shader:
     //
     //  1 - Using just the name of the shader and ledding ofShader look for .frag and .vert:
@@ -440,6 +493,30 @@ void ofApp::setupShaders(){
     ofClear(0,0,0,255);
     fbo3.end();
     
+    maskFbo4.begin();
+    ofClear(0,0,0,0);
+    maskFbo4.end();
+    
+    fbo4.begin();
+    ofClear(0,0,0,255);
+    fbo4.end();
+    
+    maskFbo5.begin();
+    ofClear(0,0,0,0);
+    maskFbo5.end();
+    
+    fbo5.begin();
+    ofClear(0,0,0,255);
+    fbo5.end();
+    
+    maskFbo6.begin();
+    ofClear(0,0,0,0);
+    maskFbo6.end();
+    
+    fbo6.begin();
+    ofClear(0,0,0,255);
+    fbo6.end();
+    
 }
 
 
@@ -447,12 +524,15 @@ void ofApp::updateShaders(){
     
     // MASK (frame buffer object)
     //
-    
     ofSetCircleResolution(16);
+    
+    float def = 120;
+    
+    
+    //////// MASK FBO 1
     
     
     maskFbo1.begin();
-    
     ofEnableAlphaBlending();
     
     ofSetColor(255,255,255, 5); //geti("FadeEffect"));
@@ -460,7 +540,6 @@ void ofApp::updateShaders(){
     if(isKinectOn){
 
         //chamar kaoxNI updateNI
-        
         ////
 //        mask = kin.getUserMask();
 //        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
@@ -469,139 +548,203 @@ void ofApp::updateShaders(){
     
     ofSetColor(0,5);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
-    
 
     ofSetColor(255, 25);
-    
-    ge.drawBox2d();
+    ge.drawEllipses();
     
     for(int i = 10; i > 0; i--){
         
         float factor = i;
         
         ofPushStyle();
-        
         ofSetColor(255, (int)25);
-        
-//        ofDrawEllipse(b[0].getx(),b[0].gety(), 200-factor,200-factor);
-//        ofDrawEllipse(b[1].getx(),b[1].gety(), 200-factor,200-factor);
-        
         ofDrawEllipse(ofGetMouseX(),ofGetMouseY(), ofRandom(200),ofRandom(200));
-        
-//        ofDrawEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
-//        ofDrawEllipse(sp[0].x,b[0].y, 200-factor,200-factor);
-
-        
-//        for (int i=0; i <b.size(); i++) ofDrawEllipse(b[i].getx(), b[i].gety(), 100, 100);
-
-        
         ofPopStyle();
         
     }
-    
-    
-    
-    
-//   maskFbo1.readToPixels(metaPixels);
-    
-    
-    
-    
-    
-    /*
-    int w = 192;
-    int h = 108;
-    
-    float scale = .5;
-    
-    
-    for (int y=0; y<h; y++) {
-        
-        for (int x=0; x<w; x++) {
-            
-            int m = 1;
-            for (int i=0; i <numBlobs-1; i++) {
-                // Increase this number to make your blobs bigger
-                m += b[i].getbs()*10000/(b[i].bx[x] + b[i].by[y] + 1);
-            }
-            
-            ofColor cor = ofColor(255-ofDist(x, y, w*.5, h*.5), m+ofDist(x, y, w*.5, h*.5)*.3, (x+m+y)*scale); //in HSB mode: color((m+x+y),255,255);
-            
-            metaPixels.setColor(x, y, cor);
-        }
-    }
-    
-    ofTexture texture1;
-    
-    
-    texture1.loadData(metaPixels);
-    texture1.draw(0,0, 1920, 1080);
-    */
-    
-    
     maskFbo1.end();
     
+    //////// FBO 1
     
-    
-    // HERE the shader-masking happends
-    //
     fbo1.begin();
-    // Cleaning everthing with alpha mask on 0 in order to make it transparent for default
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
     shader.setUniformTexture("maskTex", maskFbo1.getTextureReference(), 1 );
     
-    //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
-    
-    layer3.draw(0,0);
-//    srcImg.draw(0,0);
+    layer1.draw(0,0);
     
     shader.end();
     fbo1.end();
     
+    ////////fim FBO 1
     
     
+    ////////////////// FBO     2
+    /// MASK
     maskFbo2.begin();
     
     ofEnableAlphaBlending();
     
-    
-    ofSetColor(0,25);
+    ofSetColor(0,5);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
     
+    ofSetColor(255, 25);
     
-    float def = 120;
-    
-    for(int i = 0; i < def; i++){
+    for(int i = 1; i > 0; i--){
         
-        float px = ofGetWidth()/def*i;
-        float fx = ofDist(px, 0, ofGetMouseX(), 0)/ofGetWidth() * ofGetWidth()/def;
+        float factor = i;
         
-        ofSetColor(255, 255, 255, 20);
-        ofDrawRectangle(px, 0, fx*2, ofGetHeight());
+        ofPushStyle();
+        ofSetColor(255, (int)26);
+        
+        brushImg.draw(ofGetMouseX()+ofRandom(-20,20),ofGetMouseY()+ofRandom(-20,20));
+        
+        
+        //ofDrawEllipse(ofGetMouseX()+ofRandom(-200,200),ofGetMouseY()+ofRandom(-200,200), ofRandom(16),ofRandom(16));
+        ofPopStyle();
         
     }
-  
+    
     maskFbo2.end();
     
-    
-    
-    // HERE the shader-masking happends
-    //
+    //FBO
     fbo2.begin();
-    // Cleaning everthing with alpha mask on 0 in order to make it transparent for default
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    //shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
     
-    //videoCor.draw(0, 0, ofGetWidth(), ofGetHeight());
     
     layer2.draw(0,0);
-    //    srcImg.draw(0,0);
     
     shader.end();
     fbo2.end();
+    
+    /// fim 2
+    
+    
+    
+    
+    ////////////////// FBO     3
+    /// MASK
+    maskFbo3.begin();
+    
+    ofEnableAlphaBlending();
+    ofSetColor(0,55);
+    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+    
+    
+    ofSetColor(255,150);
+    //ofDrawRectangle(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()), ofRandom(40), ofRandom(40));
+    
+    ge.drawBoxes();
+    
+    
+    maskFbo3.end();
+    
+    //FBO
+    fbo3.begin();
+    ofClear(0, 0, 0, 255-geti("FadeEffect"));
+    
+    shader.begin();
+    shader.setUniformTexture("maskTex", maskFbo3.getTextureReference(), 1 );
+    
+    
+    layer3.draw(0,0);
+    
+    shader.end();
+    fbo3.end();
+    
+    /// fim 3
+    
+    
+    
+    ////////////////// FBO     4
+    /// MASK
+    maskFbo4.begin();
+    
+    ofEnableAlphaBlending();
+    ofSetColor(0,25);
+    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+    
+    ge.drawPolys();
+    
+    maskFbo4.end();
+    
+    //FBO
+    fbo4.begin();
+    ofClear(0, 0, 0, 255-geti("FadeEffect"));
+    
+    shader.begin();
+    shader.setUniformTexture("maskTex", maskFbo4.getTextureReference(), 1 );
+    
+    layer4.draw(0,0);
+    
+    shader.end();
+    fbo4.end();
+    
+    /// fim 4
+    
+    ////////////////// FBO     5
+    /// MASK
+    
+    maskFbo5.begin();
+    
+    ofEnableAlphaBlending();
+    
+    ofSetColor(0,5);
+    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+    
+    ofSetColor(255, 25);
+    
+    for(int i = 3; i > 0; i--){
+        
+        float factor = i;
+        
+        ofPushStyle();
+        ofSetColor(255, (int)26);
+        
+        ofPushMatrix();
+        
+        
+        ofTranslate(ofGetMouseX()+ofRandom(-20,20), ofGetMouseY()+ofRandom(-20,20));
+        ofScale(2.5, 2.5);
+        
+        brushImg.draw(-125,-125);
+        
+        
+        //ofDrawEllipse(ofGetMouseX()+ofRandom(-200,200),ofGetMouseY()+ofRandom(-200,200), ofRandom(16),ofRandom(16));
+        ofPopStyle();
+        
+    }
+    
+    maskFbo5.end();
+    
+    
+    //FBO
+    fbo5.begin();
+    ofClear(0, 0, 0, 255-geti("FadeEffect"));
+    
+    shader.begin();
+    shader.setUniformTexture("maskTex", maskFbo5.getTextureReference(), 1 );
+    
+    
+//    ofSetColor(0);
+//    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+    
+    layer5.draw(0,0);
+    
+    shader.end();
+    fbo5.end();
+    
+    /// fim 5
+    
+//    float totPix = ofGetHeight()*ofGetWidth();
+//    
+//    for (int p=0; p<totPix; p++) {
+//        
+//    }
+    
     
 }

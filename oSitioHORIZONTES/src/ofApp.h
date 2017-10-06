@@ -90,14 +90,20 @@ public:
     ofImage     dstImg;
     ofImage     brushImg;
     
-    ofFbo       maskFbo1, maskFbo2, maskFbo3;
-    ofFbo       fbo1, fbo2, fbo3;
+    ofFbo       maskFbo1, maskFbo2, maskFbo3, maskFbo4, maskFbo5, maskFbo6;
+    ofFbo       fbo1, fbo2, fbo3, fbo4, fbo5, fbo6;
     
     ofShader    shader;
     
+    
+    ofImage layer0;
     ofImage layer1;
     ofImage layer2;
     ofImage layer3;
+    ofImage layer4;
+    ofImage layer5;
+    ofImage layer6;
+    
     
     int numBlobs = 12;
     

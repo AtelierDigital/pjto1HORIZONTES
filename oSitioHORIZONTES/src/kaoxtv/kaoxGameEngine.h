@@ -27,13 +27,19 @@ public:
 	void setupBox2d();
 	void updateBox2d();
 	void drawBox2d();
+    
+    void drawEllipses();
+    void drawBoxes();
+    void drawPolys();
 	
     void initDemo(int num);
     void initINTUITVdemo(int num);
+
+    void initHorizontes(int num);
+    
     
  	void loadPoly();
 	void createPolyZ();
-    void drawZ(float x, float y, float size);
     
     void applyRepulsionForce(float x, float y, float amount);
     void applyAttractionPoint(float x, float y, float amount);
