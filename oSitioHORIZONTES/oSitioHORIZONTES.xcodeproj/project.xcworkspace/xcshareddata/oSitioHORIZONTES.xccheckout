@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>ABC437ED-D040-4AC5-930C-C3BDDFA88EE8</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>oSitioHORIZONTES</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>561DBA788C32F8435EA4D86F023E01CF00D9146B</key>
 		<string>https://github.com/AtelierDigital/pjto1HORIZONTES.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>oSitioHORIZONTES/oSitioHORIZONTES.xcodeproj/project.xcworkspace</string>
+	<string>oSitioHORIZONTES/oSitioHORIZONTES.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>561DBA788C32F8435EA4D86F023E01CF00D9146B</key>

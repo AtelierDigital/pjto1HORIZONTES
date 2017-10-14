@@ -79,6 +79,7 @@ void ofApp::setup() {
     ge.initHorizontes(26);
     
     
+    
 }
 
 
@@ -113,6 +114,44 @@ void ofApp::setupControlPanel() {
     
     panel.addToggle("ShowPanel", true);
     
+    
+    
+    // ------------------------------------------------------- Camadas
+    panel.addPanel("Camadas");
+    
+    panel.addToggle("Background", true);
+    panel.addToggle("Layer1", true);
+    panel.addToggle("Layer2", true);
+    panel.addToggle("Layer3", true);
+    panel.addToggle("Layer4", true);
+    panel.addToggle("Layer5", true);
+    panel.addToggle("Layer6", true);
+    
+    panel.addToggle("SendOSC", true);
+    
+    
+    
+    // ------------------------------------------------------- Camadas
+    panel.addPanel("Noise Shader");
+    
+    
+    panel.addSlider("noiseIntensity", 0, -4.0f, 4.0f);
+    panel.addSlider("noiseVelocity", 0, -4.0f, 4.0f);
+    
+    
+    
+    
+    panel.addSlider("shaderValue1", 0.5, 0.0, 1., 0);
+    panel.addSlider("shaderValue2", 0.5, 0.0, 1., 0);
+    panel.addSlider("shaderValue3", 0.5, 0.0, 1., 0);
+    panel.addSlider("shaderValue4", 0.5, 0.0, 1., 0);
+    
+    
+    panel.addSlider("shaderScale", 0, -4.0f, 4.0f);
+    panel.addToggle("useNoiseShader", true);
+    
+    
+    
     panel.reloadSettings();
     panel.hide();
     
@@ -120,36 +159,7 @@ void ofApp::setupControlPanel() {
 //--------------------------------------------------------------
 void ofApp::update(){
 	
-    
-    //kinect setup
-    
-    if(getb("StartKinect")){
-        
-//        kin.isInfrared = getb("IR");
-//        kin.startKinect(geti("KinectSource"));
-       
-//        isKinectOn = true;
-        setb("StartKinect", false);
-    }
-    
-    if(isKinectOn)
-    {
-//        kin.filterFactor = getf("FilterFactor");
-//        kin.nearThreshold = geti("NearThreshold");
-//        kin.farThreshold = geti("FarThreshold");         
-//
-//        kin.isTracking = getb("TrackingUser");
-//        kin.isTrackingHands = getb("TrackingHands");
-//        
-//        if(geti("KinectDraw") > 2)  kin.isMasking = true;
-//        else                        kin.isMasking = false;
-    }
-    
-	
-	if(isKinectOn){
-        //chamar kaoxNI updateNI
-//        kin.updateNI();
-	}
+    updateKinect();
 	
 	counter = counter + 0.033f;
     
@@ -172,6 +182,8 @@ void ofApp::draw(){
 	
 	ofBackground(0);
 	
+    glPushMatrix();
+    
     
 //	glEnable (GL_DEPTH_TEST);
 
@@ -187,57 +199,91 @@ void ofApp::draw(){
     //videoPB.draw(0, 0, ofGetWidth(), ofGetHeight());
     layer0.draw((pllx/100),(plly/100));
     
-    glEnable(GL_BLEND_SRC_ALPHA);
-    
-    fbo1.draw(0,0);
     
     
-    
-    
-    glEnable(GL_BLEND_SRC_ALPHA);
-    
-    ofSetColor(0, 0, 0, 120);
-    fbo4.draw(5+pllx/20.0,4+(plly/20));
-    
-    
-    ofSetColor(255);
-    fbo4.draw(-10+pllx/20.0,-10+(plly/20));
-    
-    
-    
-    glEnable(GL_BLEND_SRC_ALPHA);
+    if (getb("Layer1")) {
 
-    ofSetColor(0, 0, 0, 120);
-    fbo2.draw(50+pllx/80.0,50+(plly/80));
+        glEnable(GL_BLEND_SRC_ALPHA);
+        fbo1.draw(0,0);
+    
+    }
     
     
-    ofSetColor(255);
-    fbo2.draw(0+pllx/80.0,(plly/80));
+    if (getb("Layer2")) {
+
+        
+        glEnable(GL_BLEND_SRC_ALPHA);
+
+        ofSetColor(0, 0, 0, 120);
+        fbo2.draw(50+pllx/80.0,50+(plly/80));
+        
+        
+        ofSetColor(255);
+        fbo2.draw(0+pllx/80.0,(plly/80));
+        
+    }
 
     
     
-    glEnable(GL_BLEND_SRC_ALPHA);
-    
-    ofSetColor(0, 0, 0, 120);
-    fbo3.draw(-50+pllx/50.0,40+(plly/50));
-    
-    
-    ofSetColor(255);
-    fbo3.draw(-10+pllx/50.0,-10+(plly/50));
-    
-    
-    
-    
-    glEnable(GL_BLEND_SRC_ALPHA);
-    
-    ofSetColor(0, 0, 0, 120);
-    fbo5.draw(-60+pllx/10.0,40+(plly/20));
+    if (getb("Layer3")) {
+        
+        glEnable(GL_BLEND_SRC_ALPHA);
+        
+        ofSetColor(0, 0, 0, 120);
+        fbo3.draw(-50+pllx/50.0,40+(plly/50));
+        
+        
+        ofSetColor(255);
+        fbo3.draw(-10+pllx/50.0,-10+(plly/50));
+        
+    }
     
     
-    ofSetColor(255);
-    fbo5.draw(-20+pllx/10.0,-10+(plly/20));
+    if (getb("Layer5")) {
+
+    
+        glEnable(GL_BLEND_SRC_ALPHA);
+        
+        ofSetColor(0, 0, 0, 120);
+        fbo5.draw(-60+pllx/10.0,40+(plly/20));
+        
+        
+        ofSetColor(255);
+        fbo5.draw(-20+pllx/10.0,-10+(plly/20));
+                
+    }
     
     
+    if (getb("Layer4")) {
+
+        
+        glEnable(GL_BLEND_SRC_ALPHA);
+        
+        
+        ofPushMatrix();
+        ofTranslate(5+pllx/20.0, 4+(plly/20));
+        
+        
+        ofSetColor(0, 0, 0, 120);
+        fbo4.draw(0,0);
+        
+        
+        ofPushStyle();
+        ge.drawPolyLines();
+        
+        ofTranslate(-10+pllx/20.0,-10+(plly/20));
+        
+        ofSetColor(0, 255);
+        ofSetLineWidth(2);
+        ge.drawPolyLines();
+        
+        ofSetColor(255);
+        fbo4.draw(0,0);
+        
+        
+        ofPopMatrix();
+        ofPopStyle();
+    }
     
     
     
@@ -250,19 +296,67 @@ void ofApp::draw(){
 //    }
     
     
+    
 	ofDisableAlphaBlending();
+    
+    glPopMatrix();
+    
     
     if(isSyphonOn) mainOutputSyphonServer.publishScreen();
 	
 	
-    if(getb("ShowPanel")) ofShowCursor();
-    else                  ofHideCursor();
+    if(getb("ShowPanel")) {
+
+        ofShowCursor();
+        panel.draw();
+        
+    }else    ofHideCursor();
 
     
     
     
+}
+
+
+
+///-----------------------updates
+
+void ofApp::updateKinect(){
+    
+    
+    //kinect setup
+    
+    if(getb("StartKinect")){
+        
+        //        kin.isInfrared = getb("IR");
+        //        kin.startKinect(geti("KinectSource"));
+        
+        //        isKinectOn = true;
+        setb("StartKinect", false);
+    }
+    
+    if(isKinectOn)
+    {
+        //        kin.filterFactor = getf("FilterFactor");
+        //        kin.nearThreshold = geti("NearThreshold");
+        //        kin.farThreshold = geti("FarThreshold");
+        //
+        //        kin.isTracking = getb("TrackingUser");
+        //        kin.isTrackingHands = getb("TrackingHands");
+        //
+        //        if(geti("KinectDraw") > 2)  kin.isMasking = true;
+        //        else                        kin.isMasking = false;
+    }
+    
+    
+    if(isKinectOn){
+        //chamar kaoxNI updateNI
+        //        kin.updateNI();
+    }
     
 }
+
+
 
 
 //UI
@@ -293,6 +387,11 @@ void ofApp::receiveOSC(){
 	
 }
 //--------------------------------------------------------------
+void ofApp::sendOSC(){
+    
+    
+    
+}
 
 ///EVENTOS//--------------------------------------------------------------Eventos
 void ofApp::keyPressed(int key){
@@ -306,28 +405,27 @@ void ofApp::keyPressed(int key){
 	
 		switch (key) {    
             case '1':
-                setb("Toggle01", !getb("Toggle01"));
+                setb("Layer1", !getb("Layer1"));
                 break;
             case '2':
-                setb("Toggle02", ! getb("Toggle02"));
+                setb("Layer2", ! getb("Layer2"));
                 break;
             case '3':
-                setb("Toggle03", ! getb("Toggle03"));
+                setb("Layer3", ! getb("Layer3"));
                 break;				
             case '4':
-                setb("Toggle04", ! getb("Toggle04"));
+                setb("Layer4", ! getb("Layer4"));
                 break;
             case '5':
-                setb("Toggle05", ! getb("Toggle05"));
+                setb("Layer5", ! getb("Layer5"));
                 break;
             case '6':
-                setb("Toggle06", ! getb("Toggle06"));				
+                setb("Layer6", ! getb("Layer6"));				
                 break;
-            case '7':
-                setb("Toggle07", ! getb("Toggle07"));
-                break;
-            case '8':
-                setb("Toggle08", ! getb("Toggle08"));				
+            case ' ':
+                
+                ge.initHorizontes(26);
+                
                 break;
                 
             case '0':
@@ -693,10 +791,10 @@ void ofApp::updateShaders(){
     
     ofEnableAlphaBlending();
     
-    ofSetColor(0,5);
+    ofSetColor(0,15);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
     
-    ofSetColor(255, 25);
+    ofSetColor(255, 15);
     
     for(int i = 3; i > 0; i--){
         
@@ -706,7 +804,6 @@ void ofApp::updateShaders(){
         ofSetColor(255, (int)26);
         
         ofPushMatrix();
-        
         
         ofTranslate(ofGetMouseX()+ofRandom(-20,20), ofGetMouseY()+ofRandom(-20,20));
         ofScale(2.5, 2.5);

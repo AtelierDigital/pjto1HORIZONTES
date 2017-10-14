@@ -31,6 +31,7 @@ public:
     void drawEllipses();
     void drawBoxes();
     void drawPolys();
+    void drawPolyLines();
 	
     void initDemo(int num);
     void initINTUITVdemo(int num);
@@ -68,7 +69,7 @@ public:
     void moveEllipse(int id, float x, float y);
     
     
-	void makeWalls();
+	void makeWalls(float margin=0);
 	
     void loadSet(int idx);
 	
@@ -125,6 +126,8 @@ public:
     vector <ofVec2f> cursorsFounded;
 
     vector <ofColor> colorList;
+    
+    vector<vector<ofVec2f>> polyPoints;
 };
 
 #endif

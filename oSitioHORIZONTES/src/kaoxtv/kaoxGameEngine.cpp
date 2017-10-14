@@ -433,10 +433,40 @@ void kaoxGameEngine::drawPolys() {
 }
 //--------------------------------------------------------------
 
+
+void kaoxGameEngine::drawPolyLines(){
+    
+    
+    int nP = polyPoints[0].size();
+    int nL = polyPoints.size();
+
+    
+    for (int i=0; i<nP; i++) {
+    
+            
+        ofPoint p1 = ofPoint(polyPoints[0][i].x, polyPoints[0][i].y);
+        ofPoint p2 = ofPoint(polyPoints[1][i].x, polyPoints[1][i].y);
+        ofPoint p3 = ofPoint(polyPoints[2][i].x, polyPoints[2][i].y);
+        
+        ofDrawLine(p1.x, p1.y, p2.x, p2.y);
+        ofDrawLine(p1.x, p1.y, p3.x, p3.y);
+        
+    }
+    
+}
+
+
 void kaoxGameEngine::initHorizontes(int num){
     
+    circles.clear();
+    polys.clear();
+    boxes.clear();
     
-    makeWalls();
+    polyPoints.clear();
+    
+    
+    
+    makeWalls(40);
     
     for (int i=0; i<num; i++) {
         
@@ -447,7 +477,7 @@ void kaoxGameEngine::initHorizontes(int num){
         if(i%2==0){
             
         circle.setPhysics(10.0, .53, 100.5);
-        circle.setup(box2d.getWorld(), 300, 300, r/2);
+        circle.setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()/2-200, r/2);
         
         circle.setColor(ofColor(255, 200));
         circles.push_back(circle);
@@ -458,7 +488,7 @@ void kaoxGameEngine::initHorizontes(int num){
         //camada sup
         r = ofRandom(30, 18);
         circle.setPhysics(10.40, 0.03, 20000.2);
-        circle.setup(box2d.getWorld(), 300, 300, r/2);
+        circle.setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()/2-200, r/2);
         
         circle.setColor(ofColor(255, 152));
         circles.push_back(circle);
@@ -470,7 +500,7 @@ void kaoxGameEngine::initHorizontes(int num){
         ofxBox2dRect box;
         
         box.setPhysics(10.0, 0.53, 10.5);
-        box.setup(box2d.getWorld(), 300, 300, ofRandom(r*6), ofRandom(r*6));
+        box.setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()-100, ofRandom(r*4), ofRandom(r*4));
         box.setColor(ofColor(255, 255));
         boxes.push_back(box);
         
@@ -515,6 +545,7 @@ void kaoxGameEngine::initHorizontes(int num){
     
     poly1.push_back(ofVec2f(pCentral.x + ofRandom(-100,100), pCentral.y + ofRandom(-100,100)));
 
+    polyPoints.push_back(poly1);
     createPolyBox2D(poly1);
 
     
@@ -538,9 +569,33 @@ void kaoxGameEngine::initHorizontes(int num){
     
     poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
     
+    polyPoints.push_back(poly1);
     createPolyBox2D(poly1);
     
     
+    
+    pCentral = ofVec2f(ofGetWidth()/2 + ofRandom(ofGetWidth()/4), ofGetHeight()/2+ofRandom(ofGetHeight()/4));
+    
+    poly1.clear();
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    pCentral.x = ofGetWidth() - pCentral.x;
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    poly1.push_back(ofVec2f(pCentral.x + ofRandom(-60,60), pCentral.y + ofRandom(-60,60)));
+    
+    polyPoints.push_back(poly1);
+    createPolyBox2D(poly1);
     
     //    makeSolidEllipse(ofGetWidth()/2, ofGetHeight()/2, ofGetHeight()/6, 0.0, 0.0, 3.0);
     
@@ -814,7 +869,7 @@ void kaoxGameEngine::makeForce(int pt, float _power, bool _atraction){
 	
 	forces.push_back(force);
 }
-void kaoxGameEngine::makeWalls(){
+void kaoxGameEngine::makeWalls(float margin){
 	
 	if(hasWalls) { //se já tem walls reinicio sem walls
         
@@ -834,10 +889,10 @@ void kaoxGameEngine::makeWalls(){
 	ofxBox2dPolygon polyW;	
 	
     
-	polyN.addVertex(-20,0,0);
-	polyN.addVertex(width+20,0,0);
-	polyN.addVertex(width+20,-20,0);
-	polyN.addVertex(-20,-20,0);	
+	polyN.addVertex(-20+margin,0+margin,0);
+	polyN.addVertex(width+20-margin,0+margin,0);
+	polyN.addVertex(width+20-margin,-20+margin,0);
+	polyN.addVertex(-20+margin,-20+margin,0);
 	
 	polyN.setAsEdge(true);
 	polyN.triangulate(85);
@@ -847,10 +902,10 @@ void kaoxGameEngine::makeWalls(){
 	walls.push_back(polyN);
     
 	//polyE
-	polyE.addVertex(width,-20,0);
-	polyE.addVertex(width+20,-20,0);
-	polyE.addVertex(width+20,height+20,0);
-	polyE.addVertex(width,height+20,0);	
+	polyE.addVertex(width-margin,-20+margin,0);
+	polyE.addVertex(width+20-margin,-20+margin,0);
+	polyE.addVertex(width+20-margin,height+20-margin,0);
+	polyE.addVertex(width-margin,height+20-margin,0);
 	
 	polyE.setAsEdge(true);
 	polyE.triangulate(85);
@@ -859,10 +914,10 @@ void kaoxGameEngine::makeWalls(){
 	
 	walls.push_back(polyE);
 	
-	polyS.addVertex(width+20,height,0);	
-	polyS.addVertex(width+20,height+20,0);		
-	polyS.addVertex(-20,height+20,0);
-	polyS.addVertex(-20,height,0);
+	polyS.addVertex(width+20-margin,height-margin,0);
+	polyS.addVertex(width+20-margin,height+20-margin,0);
+	polyS.addVertex(-20+margin,height+20-margin,0);
+	polyS.addVertex(-20+margin,height-margin,0);
 	
 	polyS.setAsEdge(true);
 	polyS.triangulate(85);
@@ -872,10 +927,10 @@ void kaoxGameEngine::makeWalls(){
 	walls.push_back(polyS);
 	
 	
-	polyW.addVertex(-1,height+20,0);
-	polyW.addVertex(-21,height+20,0);
-	polyW.addVertex(-21,-20,0);
-	polyW.addVertex(-1,-20,0);
+	polyW.addVertex(-1+margin,height+20-margin,0);
+	polyW.addVertex(-21+margin,height+20-margin,0);
+	polyW.addVertex(-21+margin,-20+margin,0);
+	polyW.addVertex(-1+margin,-20+margin,0);
 	
 	polyW.setAsEdge(true);
 	polyW.triangulate(85);

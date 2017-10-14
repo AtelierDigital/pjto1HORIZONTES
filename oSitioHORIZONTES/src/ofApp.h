@@ -27,6 +27,10 @@ public:
 	void draw();
     
     
+    
+    void updateKinect();
+    
+    
     //UI / Eventos
     void setb(string name, bool value);
 	void seti(string name, int value);
@@ -40,6 +44,7 @@ public:
 
     //OSC
 	void receiveOSC();
+    void sendOSC();
 	
 	
     
