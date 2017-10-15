@@ -5,6 +5,8 @@
 #include "ofxOsc.h"
 #include "ofxSyphon.h"
 #include "ofxXmlSettings.h"
+#include "ofxKinect.h"
+#include "ofxOpenCV.h"
 #include <deque>
 
 
@@ -15,9 +17,13 @@
 
 #include "metaBlob.h"
 
+#include "Boid.h"
 
-#define HOST "localhost"
-#define PORT 5552
+
+const string HOST = "localhost";
+const int PORT_RECEIVE = 5552;
+const int PORT_SEND_ARDOUR = 3819; //  Porta padrao de envio de OSC para o Ardour
+const int PORT_RECEIVE_FEEDBACK_ARDOUR = 8000; //  Porta padrao de recebimento de OSC de feedback
 
 class ofApp : public ofBaseApp{
 
@@ -44,8 +50,16 @@ public:
 
     //OSC
 	void receiveOSC();
+    void receiveOSC_Ardour();
     void sendOSC();
-	
+    void sendOSC_Ardour();
+    int current_msg_string;
+    string msg_strings[20];
+    float timers[20];
+    
+    void updateBoids();
+    
+    void updateBlobs_doKaue();   //  nao estao sendo usados no momento...
 	
     
     ///new SHADERS!!!
@@ -69,6 +83,8 @@ public:
 
 	bool				isSendingOSC, isSendingHands, isSendingSkeleton, isDebugging; //kaox
 		
+    //  Kinect...
+    ofxKinect kinect;
 	
 //÷÷÷÷÷÷÷  Syphon:
 
@@ -122,6 +138,29 @@ public:
     ofPixels metaPixels;
     
     kaoxGameEngine ge;
+    
+    
+    
+    //  Agentes
+    vector<Boid> boids;
+    
+    
+    //  ofxKinect
+    
+    ofxCvGrayscaleImage grayImage; // grayscale depth image
+    ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
+    ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
+    
+    //  OpenCV
+    
+    ofxCvContourFinder contourFinder;
+    
+    //  Analise da depth image
+    struct {
+        ofPoint centroid;
+        ofRectangle rectCoverage;
+        float totalBlobsArea;
+    } kinDepthAnalysis;
 };
 
 #endif

@@ -20,7 +20,7 @@ public:
     kaoxGameEngine();
 
     void setup();
-    void update();
+    void update(float x, float y);
     void draw();
     
 	//Box2D OLD

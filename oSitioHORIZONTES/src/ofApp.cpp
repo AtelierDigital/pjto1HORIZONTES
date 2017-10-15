@@ -30,7 +30,9 @@ void ofApp::setup() {
 	ofBackground(15, 15, 15);
 
 	//OSC
-	receiver.setup(PORT);
+    receiver.setup(PORT_RECEIVE_FEEDBACK_ARDOUR);//PORT_RECEIVE);
+    // open an outgoing connection to HOST:PORT
+    sender.setup(HOST, PORT_SEND_ARDOUR);
 	// open an outgoing connection to HOST:PORT
 	//sender.setup(HOST, PORT);	
 	
@@ -47,7 +49,7 @@ void ofApp::setup() {
     
     setupShaders();
     
-    //setb("StartKinect", true);
+    setb("StartKinect", true);
     ofHideCursor();
 
     layer0.load("fundos/fundos0.jpg");
@@ -78,7 +80,16 @@ void ofApp::setup() {
     ge.setup();
     ge.initHorizontes(26);
     
+    //
+    //  Agentes
     
+    ofPoint leftStop(ofGetWidth()/10, ofGetHeight()/10);
+    ofPoint rightStop(9*ofGetWidth()/10, ofGetHeight()/10);
+    for(int i =0; i < 6; i++)
+    {
+        Boid boid(ofGetWidth()/2, ofGetHeight()/2, leftStop, rightStop, 0.6 * ofGetHeight());
+        boids.push_back(boid);
+    }
     
 }
 
@@ -101,7 +112,7 @@ void ofApp::setupControlPanel() {
     panel.addMultiToggle("KinectSource", 0, variadic("live")("recent")("calib")("swap")("menuDir")("menuInf")("misc"));    
     
     panel.addSlider("NearThreshold", 500, 100, 3000);
-    panel.addSlider("FarThreshold", 1000, 200, 6000);
+    panel.addSlider("FarThreshold", 6000, 200, 8000);
     panel.addSlider("FilterFactor", .1, -2, 2);
 
     panel.addToggle("TrackingHands", true);
@@ -161,20 +172,48 @@ void ofApp::update(){
 	
     updateKinect();
 	
-	counter = counter + 0.033f;
+	//counter = counter + 0.033f;   tempo entre frames? Tem uma funcao millis() ou algo do tipo...
     
+    sendOSC_Ardour();
+    //receiveOSC_Ardour();
+    
+    updateBoids();
+    
+    //updateBlobs_doKaue();
+    
+    /* NOTE - [Brizo] retirei a updateShaders abaixo, aparentemente duplicada.
+    o for de update dos blobs estah agora em updateBlobs_doKaue(); comentada acima
+    (nao estao sendo usados). "_doKaue" para nao confundir com os blobs da analise do OpenCV
+    updateShaders();
 
     //updateBlobs
     for (int i=0; i<numBlobs-1; ++i) {
         b[i].update(i,b[i+1].getx(), b[i+1].gety(), ofGetMouseX(), ofGetMouseY());
-    }
+    }*/
     
     
     updateShaders();
     
-    ge.update();
+    ge.update(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.centroid.y);
     ge.updateBox2d();
 	
+}
+//--------------------------------------------------------------
+void ofApp::updateBoids()
+{
+    //centroid.x = ofGetMouseX();   //  test
+    //centroid.y = ofGetMouseY();   //  test
+    for(int i=0; i<boids.size(); i++)
+    {
+        boids[i].run(boids, this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y);  // passing the entire list of boids to each boid
+    }
+}
+//--------------------------------------------------------------
+void ofApp::updateBlobs_doKaue()
+{
+    for (int i=0; i<numBlobs-1; ++i) {
+        b[i].update(i,b[i+1].getx(), b[i+1].gety(), ofGetMouseX(), ofGetMouseY());
+    }
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -193,8 +232,8 @@ void ofApp::draw(){
     ofSetColor(255);
     
     
-    float pllx = (-ofGetMouseX() + ofGetWidth()/2);
-    float plly = (-ofGetMouseY() + ofGetHeight()/2);
+    float pllx = (-this->kinDepthAnalysis.centroid.x + ofGetWidth()/2);
+    float plly = (-this->kinDepthAnalysis.centroid.y + ofGetHeight()/2);
     
     //videoPB.draw(0, 0, ofGetWidth(), ofGetHeight());
     layer0.draw((pllx/100),(plly/100));
@@ -301,6 +340,13 @@ void ofApp::draw(){
     
     glPopMatrix();
     
+    //  ---- DEBUG da analise ([Brizo] nao achei a flag de Debug...)
+    ofPushMatrix();
+    ofSetColor(255);
+    ofDrawBitmapString(std::to_string(this->kinDepthAnalysis.totalBlobsArea), this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y-10);
+    ofDrawRectangle(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y, 20, 20);
+    ofPopMatrix();
+    //  -----
     
     if(isSyphonOn) mainOutputSyphonServer.publishScreen();
 	
@@ -331,10 +377,130 @@ void ofApp::updateKinect(){
         //        kin.isInfrared = getb("IR");
         //        kin.startKinect(geti("KinectSource"));
         
-        //        isKinectOn = true;
+        //  ofxKinect
+        
+        // enable depth->video image calibration
+        kinect.setRegistration(true);
+        
+        kinect.init();
+        //kinect.init(true); // shows infrared instead of RGB video image
+        //kinect.init(false, false); // disable video image (faster fps)
+        
+        kinect.open();		// opens first available kinect
+        //kinect.open(1);	// open a kinect by id, starting with 0 (sorted by serial # lexicographically))
+        //kinect.open("A00362A08602047A");	// open a kinect using it's unique serial #
+        
+        // print the intrinsic IR sensor values
+        if(kinect.isConnected()) {
+                        ofLogNotice() << "sensor-emitter dist: " << kinect.getSensorEmitterDistance() << "cm";
+                        ofLogNotice() << "sensor-camera dist:  " << kinect.getSensorCameraDistance() << "cm";
+                        ofLogNotice() << "zero plane pixel size: " << kinect.getZeroPlanePixelSize() << "mm";
+                        ofLogNotice() << "zero plane dist: " << kinect.getZeroPlaneDistance() << "mm";
+        }
+        
+        //  OpenCV
+        grayImage.allocate(kinect.width, kinect.height);
+        //grayThreshNear.allocate(kinect.width, kinect.height);
+        //grayThreshFar.allocate(kinect.width, kinect.height);
+        
+        mask.allocate(kinect.width, kinect.height, OF_IMAGE_GRAYSCALE);
+        
+        isKinectOn = true;
         setb("StartKinect", false);
     }
     
+    //
+    //  * Armazenando a depth image, a espelhando e descartando tudo que esta fora de near e far
+    //  * Determinando qtd de pixels da mask da depth image; retangulo de cobertura; centroide
+    //  * Atualizando agentes
+    
+    kinect.setDepthClipping((float)getf("NearThreshold"), (float)getf("FarThreshold"));
+    
+    kinect.update();
+    
+    this->kinDepthAnalysis.centroid = ofVec3f::ofVec3f(-1.0f, -1.0f);
+    this->kinDepthAnalysis.rectCoverage.set(-1.0f, -1.0f, -1.0f, -1.0f);
+    this->kinDepthAnalysis.totalBlobsArea = 0.0f;
+    
+    // there is a new frame and we are connected
+    if(kinect.isFrameNew()) {
+        
+        // Lendo e espelhando a depth image do kinect
+        grayImage.setFromPixels(kinect.getDepthPixels());
+        grayImage.mirror(false, true);
+        
+        grayImage.getCvImage();
+        
+        //ofLogNotice() << "count = " << grayImage.countNonZeroInRegion(0, 0, kinect.width, kinect.height);
+        
+        /*
+         // we do two thresholds - one for the far plane and one for the near plane
+         // we then do a cvAnd to get the pixels which are a union of the two thresholds
+         if(bThreshWithOpenCV) {
+         grayThreshNear = grayImage;
+         grayThreshFar = grayImage;
+         //grayThreshNear.threshold(kinect.getNearClipping(), true);
+         //grayThreshFar.threshold(kinect.getFarClipping());
+         grayThreshNear.threshold(230, true);    //  hard-coding so para testes, usando o kinect bem perto de mim
+         grayThreshFar.threshold(70, trye); //  hard-coding so para testes, usando o kinect bem perto de mim
+         cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImage.getCvImage(), NULL);
+         } else {*/
+        
+        // Estou mantendo os valores intermediarios ao inves de satura-los (TODO - vamos saturar ou nao?)
+        ofPixels & pix = grayImage.getPixels();
+        int numPixels = pix.size();
+        for(int i = 0; i < numPixels; i++) {
+            if(pix[i] > kinect.getFarClipping() || pix[i] < (kinect.getNearClipping())) {
+                //if(pix[i] > 230 || pix[i] < 70) {    //  hard-coding so para testes, usando o kinect bem perto de mim
+                pix[i] = 0;
+            }
+            else
+            {
+                pix[i] *= 10.0f;
+            }
+        }
+        //}
+        
+        //  Comentado - Nao estamos mais editando os pixels da grayImage individualmente...
+        //grayImage.flagImageChanged(); // updateTexture(); ?
+        
+        
+        //  Convertendo para ofImage
+        mask.setFromPixels(grayImage.getPixels());
+        mask.update();
+        
+        
+        // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
+        // also, find holes is set to true so we will get interior contours as well....
+        float nblobs = (float)contourFinder.findContours(grayImage, 10, (kinect.width*kinect.height)/2, 10, false);
+        
+        if(nblobs > 0) {
+            this->kinDepthAnalysis.rectCoverage   = contourFinder.blobs[0].boundingRect;
+            this->kinDepthAnalysis.centroid       = contourFinder.blobs[0].centroid;
+            this->kinDepthAnalysis.totalBlobsArea = contourFinder.blobs[0].area;
+        }
+        for(int i=1; i < nblobs; i++)
+        {
+            this->kinDepthAnalysis.centroid += contourFinder.blobs[i].centroid;
+            this->kinDepthAnalysis.rectCoverage.growToInclude( contourFinder.blobs[i].boundingRect );
+            this->kinDepthAnalysis.totalBlobsArea = contourFinder.blobs[i].area;
+        }
+        this->kinDepthAnalysis.centroid /= nblobs;
+        
+        //
+        //  Migrando da escala das dimensoes da depth image do kinect para as dimensoes da tela do nosso app
+        
+        this->kinDepthAnalysis.centroid.x = ofMap(this->kinDepthAnalysis.centroid.x, 0, kinect.width, 0, ofGetWidth());
+        this->kinDepthAnalysis.centroid.y = ofMap(this->kinDepthAnalysis.centroid.y, 0, kinect.height, 0, ofGetHeight());
+        this->kinDepthAnalysis.rectCoverage.x = ofMap(this->kinDepthAnalysis.rectCoverage.x, 0, kinect.width, 0, ofGetWidth());
+        this->kinDepthAnalysis.rectCoverage.y = ofMap(this->kinDepthAnalysis.rectCoverage.y, 0, kinect.height, 0, ofGetHeight());
+        this->kinDepthAnalysis.rectCoverage.width  = ofMap(this->kinDepthAnalysis.rectCoverage.width, 0, kinect.width, 0, ofGetWidth());
+        this->kinDepthAnalysis.rectCoverage.height = ofMap(this->kinDepthAnalysis.rectCoverage.height, 0, kinect.height, 0, ofGetHeight());
+        
+        //ofLogNotice() << "centroid = " << centroid << ", rectCoverage = " << rectCoverage;
+    }
+    
+    /*SimpleOpenNI
     if(isKinectOn)
     {
         //        kin.filterFactor = getf("FilterFactor");
@@ -353,7 +519,7 @@ void ofApp::updateKinect(){
         //chamar kaoxNI updateNI
         //        kin.updateNI();
     }
-    
+    */
 }
 
 
@@ -390,7 +556,63 @@ void ofApp::receiveOSC(){
 void ofApp::sendOSC(){
     
     
+}
+//--------------------------------------------------------------
+void ofApp::sendOSC_Ardour()
+{
+    ofxOscMessage mm;
+    mm.setAddress("/set_transport_speed");
+    mm.addFloatArg(ofMap(fabs(boids[0].vel[0]), 0.0f, boids[0].getMaxSpeed(), 1.0f, 1.5f));
+    sender.sendMessage(mm, false);
+}
+//--------------------------------------------------------------
+void ofApp::receiveOSC_Ardour()
+{
+    // hide old messages
+    for(int i = 0; i < 20; i++){
+        if(timers[i] < ofGetElapsedTimef()){
+            msg_strings[i] = "";
+        }
+    }
     
+    // check for waiting messages
+    while(receiver.hasWaitingMessages()){
+        // get the next message
+        ofxOscMessage m;
+        receiver.getNextMessage(m);
+        
+        {
+            // unrecognized message: display on the bottom of the screen
+            string msg_string;
+            msg_string = m.getAddress();
+            msg_string += ": ";
+            for(int i = 0; i < m.getNumArgs(); i++){
+                // get the argument type
+                msg_string += m.getArgTypeName(i);
+                msg_string += ":";
+                // display the argument - make sure we get the right type
+                if(m.getArgType(i) == OFXOSC_TYPE_INT32){
+                    msg_string += ofToString(m.getArgAsInt32(i));
+                }
+                else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
+                    msg_string += ofToString(m.getArgAsFloat(i));
+                }
+                else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
+                    msg_string += m.getArgAsString(i);
+                }
+                else{
+                    msg_string += "unknown";
+                }
+            }
+            // add to the list of strings to display
+            msg_strings[current_msg_string] = msg_string;
+            timers[current_msg_string] = ofGetElapsedTimef() + 5.0f;
+            current_msg_string = (current_msg_string + 1) % 20;
+            // clear the next line
+            msg_strings[current_msg_string] = "";
+        }
+        
+    }
 }
 
 ///EVENTOS//--------------------------------------------------------------Eventos
@@ -400,9 +622,7 @@ void ofApp::keyPressed(int key){
 //	if(key == 't') ofToggleFullscreen();
 	
 	float smooth;
-	ofxOscMessage mm;
-
-	
+    
 		switch (key) {    
             case '1':
                 setb("Layer1", !getb("Layer1"));
@@ -443,8 +663,61 @@ void ofApp::keyPressed(int key){
 
 }
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
+void ofApp::keyReleased(int key)
+{
+    ofxOscMessage mm;
+    mm.setAddress("/transport_play");
+    /*mm.addIntArg(1);
+     mm.addFloatArg(3.5f);
+     mm.addStringArg("hello");
+     mm.addFloatArg(ofGetElapsedTimef());*/
+    sender.sendMessage(mm, false);
+    
+    
+    
+    /*  Anotando comandos OSC para o Ardour...
+     goto_start
+     goto_end
+     
+     /next_marker
+     /prev_marker
+     /locate spos roll	spos is the target position in samples; roll is a bool/integer: keep rolling or not
+     /loop_toggle	Toggle loop mode on and off
+     /loop_location start end	(frame position)
+     /midi_panic	Ardour will send an all notes off to all midi tracks
+     /cancel_all_solos	Cancel All Solos/PFLs/AFLs
+     
+     /transport_frame	Ardour sends /transport_frame current_frame
+     /transport_speed	Ardour sends /transport_speed speed
+     
+     
+     
+     /master/gain dB	dB is a float indicating the desired gain in dB
+     /master/fader position	position is a float between 0 and 1 setting the desired position of the fader
+     /master/db_delta delta	where delta is a float that will increase or decrease the gain of master by the amount of the delta. (Ardour 5.11+)
+     /master/trimdB dB	dB is a float from -20 to +20 representing the desired trim gain in dB
+     /master/pan_stereo_position position	position is a float from 0 to 1 representing the desired pan position
+     /master/mute state	state is an int of o or 1 representing the desired mute state
+     
+     
+     
+     /bank_up	Change bank to the next higher bank.
+     /bank_up delta	Where delta is a float of 1 to bank up and -1 is bank down for use with an encoder (Ardour 5.11+)
+     /bank_down	Change bank to the next lower bank.
+     /strip/mute ssid mute_st	where mute_st is a bool/int representing the desired mute state of the track
+     /strip/solo ssid solo_st	where solo_st is a bool/int representing the desired solo state of the track
+     /strip/solo_iso ssid state	where state is a bool/int representing the desired solo isolate state of the track
+     /strip/gain ssid gain	where gain is a float ranging from -193 to 6 representing the desired gain of the track in dB.
+     /strip/fader ssid position	where position is a float ranging from 0 to 1 representing the fader control position.
+     /strip/db_delta ssid delta	where delta is a float that will increase or decrease the gain of a track by the amount of the delta. (Ardour 5.11+)
+     
+     /strip/pan_stereo_position ssid position	where position is a float ranging from 0 to 1 representing the desired pan position of the track
+     /strip/pan_stereo_width ssid width	where width is a float ranging from 0 to 1 representing the desired pan width of the track
+     
+     /strip/plugin/activate ssid piid	where piid = nth Plugin, will set the plugin's state to active
+     /strip/plugin/deactivate ssid piid	where piid = nth Plugin, will set the plugin's state to inactive
+     /strip/plugin/parameter ssid piid param value	where piid = nth Plugin, param = nth param, value is a float ranging from 0 to 1 representing the desired parameter value
+     */
 }
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
@@ -460,7 +733,7 @@ void ofApp::mousePressed(int x, int y, int button){
 }
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+    ofLogNotice() << "target = " << boids[0].getTarget() << "frame rate:" << ofGetFrameRate();
 }
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
@@ -641,8 +914,23 @@ void ofApp::updateShaders(){
         ////
 //        mask = kin.getUserMask();
 //        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
+        
+        //  ofxKinect + OpenCV
+        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
 
     }
+    
+        //  Agentes
+        
+        ofPushStyle();
+        ofSetColor(255, (int)25);
+        for(int i=0; i<boids.size(); i++)
+        {
+            for(int e = 0; e < 10; e++){
+                ofDrawEllipse(boids[i].pos.x, boids[i].pos.y, ofRandom(100),ofRandom(100));
+            }
+        }
+        ofPopStyle();
     
     ofSetColor(0,5);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
@@ -656,7 +944,7 @@ void ofApp::updateShaders(){
         
         ofPushStyle();
         ofSetColor(255, (int)25);
-        ofDrawEllipse(ofGetMouseX(),ofGetMouseY(), ofRandom(200),ofRandom(200));
+        ofDrawEllipse(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.centroid.y, ofRandom(200),ofRandom(200));
         ofPopStyle();
         
     }
@@ -668,7 +956,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo1.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo1.getTexture(), 1 );
     
     layer1.draw(0,0);
     
@@ -696,7 +984,7 @@ void ofApp::updateShaders(){
         ofPushStyle();
         ofSetColor(255, (int)26);
         
-        brushImg.draw(ofGetMouseX()+ofRandom(-20,20),ofGetMouseY()+ofRandom(-20,20));
+        brushImg.draw(this->kinDepthAnalysis.centroid.x + ofRandom(-20,20), this->kinDepthAnalysis.centroid.y + ofRandom(-20,20));
         
         
         //ofDrawEllipse(ofGetMouseX()+ofRandom(-200,200),ofGetMouseY()+ofRandom(-200,200), ofRandom(16),ofRandom(16));
@@ -746,7 +1034,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo3.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo3.getTexture(), 1 );
     
     
     layer3.draw(0,0);
@@ -775,7 +1063,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo4.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo4.getTexture(), 1 );
     
     layer4.draw(0,0);
     
@@ -805,7 +1093,7 @@ void ofApp::updateShaders(){
         
         ofPushMatrix();
         
-        ofTranslate(ofGetMouseX()+ofRandom(-20,20), ofGetMouseY()+ofRandom(-20,20));
+        ofTranslate(this->kinDepthAnalysis.centroid.x + ofRandom(-20,20), this->kinDepthAnalysis.centroid.y + ofRandom(-20,20));
         ofScale(2.5, 2.5);
         
         brushImg.draw(-125,-125);
@@ -824,7 +1112,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo5.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo5.getTexture(), 1 );
     
     
 //    ofSetColor(0);

@@ -23,11 +23,11 @@ void kaoxGameEngine::setup(){
     
 }
 
-void kaoxGameEngine::update(){
+void kaoxGameEngine::update(float x, float y){
     
     
-    cursorsFounded[0].x = ofGetMouseX();
-    cursorsFounded[0].y = ofGetMouseY();
+    cursorsFounded[0].x = x;//ofGetMouseX();
+    cursorsFounded[0].y = y;//ofGetMouseY();
     
     
     box2d.update();
