@@ -115,6 +115,8 @@ public:
     
     bool audioPlaying;  //  TODO - Essa info tem que vir do Ardour
     
+    bool state_music;   //  true: acompanha a musica
+    
     ofImage mask;
 
     ofVideoPlayer videoCor, videoPB;

@@ -109,6 +109,7 @@ void ofApp::setup() {
     player.play();*/
     
     audioPlaying = false;
+    state_music = false;
 }
 
 
@@ -199,7 +200,8 @@ void ofApp::update()
     sendOSC_Ardour();
     receiveOSC_Ardour();
     
-    obbeyMusicTimeCues();
+    if(state_music)
+        obbeyMusicTimeCues();
     
     updateBoids();
 
@@ -300,24 +302,40 @@ void ofApp::obbeyMusicTimeCues()
     }
 }
 //--------------------------------------------------------------
+
 void ofApp::reset()
 {
-    setb("Layer1", true);
-    setb("Layer2", true);
-    setb("Layer3", true);
-    setb("Layer4", true);
-    setb("Layer5", true);
-    setb("Layer5", true);
-    QueroQueros.enabled = false;
-    ge.initHorizontes(26);
-    
     ofxOscMessage m;
     m.setAddress("/transport_stop");
     sender_Ardour.sendMessage(m);
     
-    ofxOscMessage m2;
-    m2.setAddress("/goto_start");
-    sender_Ardour.sendMessage(m2);
+    if(state_music)
+    {
+        setb("Layer1", true);
+        setb("Layer2", true);
+        setb("Layer3", true);
+        setb("Layer4", true);
+        setb("Layer5", true);
+        setb("Layer6", true);
+        QueroQueros.enabled = false;
+        ge.initHorizontes(26);
+        box2dEllipses_enabled = true;
+        
+        ofxOscMessage m2;
+        m2.setAddress("/goto_start");
+        sender_Ardour.sendMessage(m2);
+    }
+    else
+    {
+        QueroQueros.enabled = false;
+        box2dEllipses_enabled = false;
+        setb("Layer1", true);
+        setb("Layer2", true);
+        setb("Layer3", true);
+        setb("Layer4", false);
+        setb("Layer5", true);
+        setb("Layer6", true);
+    }
     
     audioPlaying = false;
 }
@@ -446,11 +464,11 @@ void ofApp::draw(){
     glPopMatrix();
     
     //  ---- DEBUG da analise ([Brizo] nao achei a flag de Debug...)
-    ofPushMatrix();
+    /*ofPushMatrix();
     ofSetColor(255);
     ofDrawBitmapString(std::to_string(this->kinDepthAnalysis.totalBlobsArea), this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y-10);
     ofDrawRectangle(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y, 20, 20);
-    ofPopMatrix();
+    ofPopMatrix();*/
     //  -----
     
     if(isSyphonOn) mainOutputSyphonServer.publishScreen();
@@ -653,7 +671,10 @@ float ofApp::getf(string name) {
 
 ////OSC//--------------------------------------------------------------OSC
 
-void ofApp::receiveOSC1(){
+void ofApp::receiveOSC1()
+{
+    ofxOscMessage m_send;
+    
     // hide old messages
     for(int i = 0; i < 20; i++){
         if(timers[i] < ofGetElapsedTimef()){
@@ -662,24 +683,44 @@ void ofApp::receiveOSC1(){
     }
     
     // check for waiting messages
-    while(receiver1.hasWaitingMessages()){
+    while(receiver1.hasWaitingMessages())
+    {
         // get the next message
-        ofxOscMessage m;
-        receiver1.getNextMessage(m);
-        if(m.getAddress() == "/mute1"){
-            setb("Layer1", m.getArgAsBool(0));
-        } else if(m.getAddress() == "/mute2"){
-            setb("Layer2", m.getArgAsBool(0));
-        } else if(m.getAddress() == "/mute3"){
-            setb("Layer3", m.getArgAsBool(0));
-        } else if(m.getAddress() == "/mute4"){
-            setb("Layer4", m.getArgAsBool(0));
-        } else if(m.getAddress() == "/mute5"){
-            setb("Layer5", m.getArgAsBool(0));
-        } else if(m.getAddress() == "/mute6"){
-            setb("Layer6", m.getArgAsBool(0));
+        ofxOscMessage m_receive;
+        receiver1.getNextMessage(m_receive);
+        if(m_receive.getAddress() == "/mute1"){
+            setb("Layer1", !m_receive.getArgAsBool(0));
+        } else if(m_receive.getAddress() == "/mute2"){
+            setb("Layer2", !m_receive.getArgAsBool(0));
+        } else if(m_receive.getAddress() == "/mute3"){
+            setb("Layer3", !m_receive.getArgAsBool(0));
+        } else if(m_receive.getAddress() == "/mute4"){
+            setb("Layer4", !m_receive.getArgAsBool(0));
+        } else if(m_receive.getAddress() == "/mute5"){
+            setb("Layer5", !m_receive.getArgAsBool(0));
+        } else if(m_receive.getAddress() == "/mute6"){
+            setb("Layer6", !m_receive.getArgAsBool(0));
         }
-        std::cout << m.getArgAsString(0) << std::endl;
+        else if(m_receive.getAddress() == "/mute7") {
+            QueroQueros.enabled = !m_receive.getArgAsBool(0);
+        }
+        else if(m_receive.getAddress() == "/mute8") {
+            box2dEllipses_enabled = !m_receive.getArgAsBool(0);
+        }
+        else if(m_receive.getAddress() == "/mute10") {
+            m_send.setAddress("/transport_play");
+            sender_Ardour.sendMessage(m_send, false);
+        }
+        else if(m_receive.getAddress() == "/mute11") {
+            m_send.setAddress("/transport_stop");
+            sender_Ardour.sendMessage(m_send, false);
+        }
+        else if(m_receive.getAddress() == "/mute12")
+        {
+            state_music = !m_receive.getArgAsBool(0);
+            reset();
+        }
+        std::cout << m_receive.getAddress() << std::endl;
     }
 }
 //--------------------------------------------------------------
@@ -688,7 +729,7 @@ void ofApp::sendOSC_Ardour()
     
     ofxOscMessage m2;
     m2.setAddress("/master/pan_stereo_position");
-    m2.addFloatArg(0.0f);//ofMap(ge.centroid_circles.x, 0.1f*ofGetWidth(), 0.9f*ofGetWidth(), 0.0f, 1.0f, true));
+    m2.addFloatArg(ofMap(ge.centroid_circles.x, 0.1f*ofGetWidth(), 0.9f*ofGetWidth(), 0.0f, 1.0f, true));
     sender_Ardour.sendMessage(m2, false);
     
     /*if(QueroQueros.enabled)
@@ -765,60 +806,52 @@ void ofApp::receiveOSC_Ardour()
 void ofApp::keyPressed(int key){
 
 	
-//	if(key == 't') ofToggleFullscreen();
-	
-	float smooth;
+}
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key)
+{
+    //	if(key == 't') ofToggleFullscreen();
     
-		switch (key) {    
-            case '1':
-                setb("Layer1", !getb("Layer1"));
-                break;
-            case '2':
-                setb("Layer2", ! getb("Layer2"));
-                break;
-            case '3':
-                setb("Layer3", ! getb("Layer3"));
-                break;				
-            case '4':
-                setb("Layer4", ! getb("Layer4"));
-                break;
-            case '5':
-                setb("Layer5", ! getb("Layer5"));
-                break;
-            case '6':
-                setb("Layer6", ! getb("Layer6"));				
-                break;
-            case ' ':
-                
-                ge.initHorizontes(26);
-                
-                break;
-                
-            case '0':
-                setb("ShowPanel", ! getb("ShowPanel"));
-                break;
-                
-            case 's':
-                panel.saveSettings();
-                break;
-        }
+    float smooth;
+    
+    ofxOscMessage mm;
+    
+    switch (key) {
+        case '1':   setb("Layer1", !getb("Layer1"));    break;
+        case '2':   setb("Layer2", ! getb("Layer2"));   break;
+        case '3':   setb("Layer3", ! getb("Layer3"));   break;
+        case '4':   setb("Layer4", ! getb("Layer4"));   break;
+        case '5':   setb("Layer5", ! getb("Layer5"));   break;
+        case '6':   setb("Layer6", ! getb("Layer6"));   break;
+            
+        case 'a':   QueroQueros.enabled = !QueroQueros.enabled; break;
+        case 'c':   box2dEllipses_enabled = !box2dEllipses_enabled; break;
+            
+            
+            //case ' ': ge.initHorizontes(26);  break;
+        case 'p':
+            mm.setAddress("/transport_play");
+            sender_Ardour.sendMessage(mm, false);
+            break;
+        case 'q':
+            mm.setAddress("/transport_stop");
+            sender_Ardour.sendMessage(mm, false);
+            break;
+            
+        //case '0':   setb("ShowPanel", ! getb("ShowPanel")); break;
+        case '0':
+            state_music = !state_music;
+            reset();
+        break;
+            
+        case 's':   panel.saveSettings();   break;
+    }
     
     
     
     cout << "frame rate:" << ofGetFrameRate() << "   mouseX:" << ofGetMouseX() << endl;
     cout << ge.centroid_circles.x << " " << ge.centroid_circles.x/(float)ofGetWidth();
     cout << "bar | beat: " << Ardour_state.bar << " | " << Ardour_state.beat << endl;
-
-}
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key)
-{
-    if(key == OF_KEY_RIGHT)
-    {
-        ofxOscMessage mm;
-        mm.setAddress("/transport_play");
-        sender_Ardour.sendMessage(mm, false);
-    }
     
     /*  Anotando comandos OSC para o Ardour...
      goto_start
@@ -906,11 +939,8 @@ void ofApp::setupShaders(){
     fbo2.allocate(width,height, GL_RGBA);
     maskFbo3.allocate(width,height, GL_RGBA);
     fbo3.allocate(width,height, GL_RGBA);
-    
-    if (getb("Layer4")) {
-        maskFbo4.allocate(width,height, GL_RGBA);
-        fbo4.allocate(width,height, GL_RGBA);
-    }
+    maskFbo4.allocate(width,height, GL_RGBA);
+    fbo4.allocate(width,height, GL_RGBA);
     maskFbo5.allocate(width,height, GL_RGBA);
     fbo5.allocate(width,height, GL_RGBA);
     maskFbo6.allocate(width,height, GL_RGBA);

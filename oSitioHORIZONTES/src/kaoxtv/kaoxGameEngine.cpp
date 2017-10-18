@@ -444,23 +444,24 @@ void kaoxGameEngine::drawPolys() {
 
 void kaoxGameEngine::drawPolyLines(){
     
-    
-    int nP = polyPoints[0].size();
-    int nL = polyPoints.size();
+    if(polyPoints.size() > 0)
+    {
+        int nP = polyPoints[0].size();
+        int nL = polyPoints.size();
 
-    
-    for (int i=0; i<nP; i++) {
-    
+        
+        for (int i=0; i<nP; i++) {
+        
+                
+            ofPoint p1 = ofPoint(polyPoints[0][i].x, polyPoints[0][i].y);
+            ofPoint p2 = ofPoint(polyPoints[1][i].x, polyPoints[1][i].y);
+            ofPoint p3 = ofPoint(polyPoints[2][i].x, polyPoints[2][i].y);
             
-        ofPoint p1 = ofPoint(polyPoints[0][i].x, polyPoints[0][i].y);
-        ofPoint p2 = ofPoint(polyPoints[1][i].x, polyPoints[1][i].y);
-        ofPoint p3 = ofPoint(polyPoints[2][i].x, polyPoints[2][i].y);
-        
-        ofDrawLine(p1.x, p1.y, p2.x, p2.y);
-        ofDrawLine(p1.x, p1.y, p3.x, p3.y);
-        
+            ofDrawLine(p1.x, p1.y, p2.x, p2.y);
+            ofDrawLine(p1.x, p1.y, p3.x, p3.y);
+            
+        }
     }
-    
 }
 
 
