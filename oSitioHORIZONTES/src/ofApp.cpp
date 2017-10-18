@@ -30,9 +30,10 @@ void ofApp::setup() {
 	ofBackground(15, 15, 15);
 
 	//OSC
-    receiver.setup(PORT_RECEIVE_FEEDBACK_ARDOUR);//PORT_RECEIVE);
+    receiver1.setup(PORT_RECEIVE);
+    receiver_Ardour.setup(PORT_RECEIVE_FEEDBACK_ARDOUR);
     // open an outgoing connection to HOST:PORT
-    sender.setup(HOST, PORT_SEND_ARDOUR);
+    sender_Ardour.setup(HOST, PORT_SEND_ARDOUR);
 	// open an outgoing connection to HOST:PORT
 	//sender.setup(HOST, PORT);	
 	
@@ -78,7 +79,10 @@ void ofApp::setup() {
     metaPixels.allocate(1920, 1080, 4);
     
     ge.setup();
-    ge.initHorizontes(26);
+    reset();    //  ja chama ge.initHorizontes(26);
+    
+    userCentroidEllipse_enabled = true;
+    box2dEllipses_enabled = true;
     
     //
     //  Agentes
@@ -88,9 +92,23 @@ void ofApp::setup() {
     for(int i =0; i < 6; i++)
     {
         Boid boid(ofGetWidth()/2, ofGetHeight()/2, leftStop, rightStop, 0.6 * ofGetHeight());
-        boids.push_back(boid);
+        QueroQueros.boids.push_back(boid);
     }
     
+    //  Audio provisorio
+    /*int bufferSize = 256;
+    ofSoundStreamListDevices();
+    // start the sound stream with a sample rate of 44100 Hz, and a buffer
+    // size of 512 samples per audioOut() call
+    soundStream.setup(this, 2, 0, 44100, bufferSize, 4);
+    //ofSoundStreamSetup(2, 0, 44100, bufferSize, 4);
+    soundStream.setDeviceID(2);
+    //ofSoundStreamStart();
+    ofFmodSetBuffersize(bufferSize);
+    player.load("Debussy  -Faune - Bernstein.wav");
+    player.play();*/
+    
+    audioPlaying = false;
 }
 
 
@@ -168,17 +186,23 @@ void ofApp::setupControlPanel() {
     
 }
 //--------------------------------------------------------------
-void ofApp::update(){
-	
+void ofApp::update()
+{
+    /*ofSoundUpdate();
+    rms = lastBuffer.getRMSAmplitude();*/
+    
     updateKinect();
 	
 	//counter = counter + 0.033f;   tempo entre frames? Tem uma funcao millis() ou algo do tipo...
     
+    receiveOSC1();
     sendOSC_Ardour();
-    //receiveOSC_Ardour();
+    receiveOSC_Ardour();
+    
+    obbeyMusicTimeCues();
     
     updateBoids();
-    
+
     //updateBlobs_doKaue();
     
     /* NOTE - [Brizo] retirei a updateShaders abaixo, aparentemente duplicada.
@@ -203,9 +227,11 @@ void ofApp::updateBoids()
 {
     //centroid.x = ofGetMouseX();   //  test
     //centroid.y = ofGetMouseY();   //  test
-    for(int i=0; i<boids.size(); i++)
-    {
-        boids[i].run(boids, this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y);  // passing the entire list of boids to each boid
+    if(QueroQueros.enabled) {
+        for(int i=0; i<QueroQueros.boids.size(); i++)
+        {
+            QueroQueros.boids[i].run(QueroQueros.boids, this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y);  // passing the entire list of boids to each boid
+        }
     }
 }
 //--------------------------------------------------------------
@@ -214,6 +240,86 @@ void ofApp::updateBlobs_doKaue()
     for (int i=0; i<numBlobs-1; ++i) {
         b[i].update(i,b[i+1].getx(), b[i+1].gety(), ofGetMouseX(), ofGetMouseY());
     }
+}
+//--------------------------------------------------------------
+void ofApp::obbeyMusicTimeCues()
+{
+    if(!audioPlaying)   //  TODO - pegar essa info do Ardour
+    {
+        if(this->kinDepthAnalysis.centroid.x >= 0)  //  sinal que o Kinect esta detectando algo
+        {
+            audioPlaying = true;
+            ofxOscMessage m;
+            m.setAddress("/transport_play");
+            sender_Ardour.sendMessage(m);
+        }
+    }
+    else
+    {
+        //if(Ardour_state.bar == 94 && Ardour_state.beat == 4) // versao MIDI, compassos corresondentes 'a musica
+        if(Ardour_state.bar == 69  && Ardour_state.beat > 2) // versao Bernstein, compassos nao correspondentes 'a musica
+        {
+            QueroQueros.enabled = true;
+        }
+        else if(Ardour_state.bar == 106)
+        {
+            QueroQueros.enabled = false;
+            setb("Layer4", true);
+        }
+        else if(Ardour_state.bar == 150)
+        {
+            setb("Layer1", false);
+            setb("Layer2", true);
+            setb("Layer3", true);
+            setb("Layer4", false);
+            setb("Layer5", true);
+        }
+        else if(Ardour_state.bar == 172 && Ardour_state.beat > 2)
+        {
+            setb("Layer1", true);
+            setb("Layer2", true);
+            setb("Layer3", true);
+            setb("Layer4", false);
+            setb("Layer5", false);
+            userCentroidEllipse_enabled = false;
+            box2dEllipses_enabled = false;
+        }
+        else if(Ardour_state.bar == 182)
+        {
+            QueroQueros.enabled = true;
+            setb("Layer5", true);
+        }
+        else if(Ardour_state.bar == 261)
+        {
+            userCentroidEllipse_enabled = true;
+            box2dEllipses_enabled = true;
+        }
+        else if(Ardour_state.bar > 341) {
+            reset();
+        }
+    }
+}
+//--------------------------------------------------------------
+void ofApp::reset()
+{
+    setb("Layer1", true);
+    setb("Layer2", true);
+    setb("Layer3", true);
+    setb("Layer4", true);
+    setb("Layer5", true);
+    setb("Layer5", true);
+    QueroQueros.enabled = false;
+    ge.initHorizontes(26);
+    
+    ofxOscMessage m;
+    m.setAddress("/transport_stop");
+    sender_Ardour.sendMessage(m);
+    
+    ofxOscMessage m2;
+    m2.setAddress("/goto_start");
+    sender_Ardour.sendMessage(m2);
+    
+    audioPlaying = false;
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -291,7 +397,6 @@ void ofApp::draw(){
         fbo5.draw(-20+pllx/10.0,-10+(plly/20));
                 
     }
-    
     
     if (getb("Layer4")) {
 
@@ -548,22 +653,51 @@ float ofApp::getf(string name) {
 
 ////OSC//--------------------------------------------------------------OSC
 
-void ofApp::receiveOSC(){
-	
-	
-}
-//--------------------------------------------------------------
-void ofApp::sendOSC(){
+void ofApp::receiveOSC1(){
+    // hide old messages
+    for(int i = 0; i < 20; i++){
+        if(timers[i] < ofGetElapsedTimef()){
+            msg_strings[i] = "";
+        }
+    }
     
-    
+    // check for waiting messages
+    while(receiver1.hasWaitingMessages()){
+        // get the next message
+        ofxOscMessage m;
+        receiver1.getNextMessage(m);
+        if(m.getAddress() == "/mute1"){
+            setb("Layer1", m.getArgAsBool(0));
+        } else if(m.getAddress() == "/mute2"){
+            setb("Layer2", m.getArgAsBool(0));
+        } else if(m.getAddress() == "/mute3"){
+            setb("Layer3", m.getArgAsBool(0));
+        } else if(m.getAddress() == "/mute4"){
+            setb("Layer4", m.getArgAsBool(0));
+        } else if(m.getAddress() == "/mute5"){
+            setb("Layer5", m.getArgAsBool(0));
+        } else if(m.getAddress() == "/mute6"){
+            setb("Layer6", m.getArgAsBool(0));
+        }
+        std::cout << m.getArgAsString(0) << std::endl;
+    }
 }
 //--------------------------------------------------------------
 void ofApp::sendOSC_Ardour()
 {
-    ofxOscMessage mm;
-    mm.setAddress("/set_transport_speed");
-    mm.addFloatArg(ofMap(fabs(boids[0].vel[0]), 0.0f, boids[0].getMaxSpeed(), 1.0f, 1.5f));
-    sender.sendMessage(mm, false);
+    
+    ofxOscMessage m2;
+    m2.setAddress("/master/pan_stereo_position");
+    m2.addFloatArg(0.0f);//ofMap(ge.centroid_circles.x, 0.1f*ofGetWidth(), 0.9f*ofGetWidth(), 0.0f, 1.0f, true));
+    sender_Ardour.sendMessage(m2, false);
+    
+    /*if(QueroQueros.enabled)
+    {
+        ofxOscMessage m1;
+        m1.setAddress("/set_transport_speed");
+        m1.addFloatArg(ofMap(fabs(QueroQueros.boids[0].vel[0]), 0.0f, QueroQueros.boids[0].getMaxSpeed(), 1.0f, 1.5f));
+        sender_Ardour.sendMessage(m1, false);
+    }*/
 }
 //--------------------------------------------------------------
 void ofApp::receiveOSC_Ardour()
@@ -576,12 +710,22 @@ void ofApp::receiveOSC_Ardour()
     }
     
     // check for waiting messages
-    while(receiver.hasWaitingMessages()){
+    while(receiver_Ardour.hasWaitingMessages()){
         // get the next message
         ofxOscMessage m;
-        receiver.getNextMessage(m);
+        receiver_Ardour.getNextMessage(m);
         
-        {
+        int dummy;
+        if(m.getAddress() == "/position/bbt") {
+            // both the arguments are int32's
+            std::sscanf(m.getArgAsString(0).c_str(), "%d|%d|%d", &Ardour_state.bar, &Ardour_state.beat, &dummy);
+            //std::cout << m.getArgAsString(0) << " " << Ardour_state.bar << " " << Ardour_state.beat << std::endl;
+        }
+        else if(m.getAddress() == "/master/meter") {
+            Ardour_state.meter = m.getArgAsFloat(0);
+        }
+        //else
+        /**/{
             // unrecognized message: display on the bottom of the screen
             string msg_string;
             msg_string = m.getAddress();
@@ -610,7 +754,9 @@ void ofApp::receiveOSC_Ardour()
             current_msg_string = (current_msg_string + 1) % 20;
             // clear the next line
             msg_strings[current_msg_string] = "";
-        }
+            
+            //std::cout << msg_string << std::endl;
+        }/**/
         
     }
 }
@@ -660,20 +806,19 @@ void ofApp::keyPressed(int key){
     
     
     cout << "frame rate:" << ofGetFrameRate() << "   mouseX:" << ofGetMouseX() << endl;
+    cout << ge.centroid_circles.x << " " << ge.centroid_circles.x/(float)ofGetWidth();
+    cout << "bar | beat: " << Ardour_state.bar << " | " << Ardour_state.beat << endl;
 
 }
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
-    ofxOscMessage mm;
-    mm.setAddress("/transport_play");
-    /*mm.addIntArg(1);
-     mm.addFloatArg(3.5f);
-     mm.addStringArg("hello");
-     mm.addFloatArg(ofGetElapsedTimef());*/
-    sender.sendMessage(mm, false);
-    
-    
+    if(key == OF_KEY_RIGHT)
+    {
+        ofxOscMessage mm;
+        mm.setAddress("/transport_play");
+        sender_Ardour.sendMessage(mm, false);
+    }
     
     /*  Anotando comandos OSC para o Ardour...
      goto_start
@@ -720,6 +865,10 @@ void ofApp::keyReleased(int key)
      */
 }
 //--------------------------------------------------------------
+/*void ofApp::audioOut(ofSoundBuffer &outBuffer) {
+    lastBuffer = outBuffer;
+}*/
+//--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
 	
 }
@@ -733,7 +882,7 @@ void ofApp::mousePressed(int x, int y, int button){
 }
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    ofLogNotice() << "target = " << boids[0].getTarget() << "frame rate:" << ofGetFrameRate();
+    ofLogNotice() << "target = " << QueroQueros.boids[0].getTarget() << "frame rate:" << ofGetFrameRate();
 }
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
@@ -758,8 +907,10 @@ void ofApp::setupShaders(){
     maskFbo3.allocate(width,height, GL_RGBA);
     fbo3.allocate(width,height, GL_RGBA);
     
-    maskFbo4.allocate(width,height, GL_RGBA);
-    fbo4.allocate(width,height, GL_RGBA);
+    if (getb("Layer4")) {
+        maskFbo4.allocate(width,height, GL_RGBA);
+        fbo4.allocate(width,height, GL_RGBA);
+    }
     maskFbo5.allocate(width,height, GL_RGBA);
     fbo5.allocate(width,height, GL_RGBA);
     maskFbo6.allocate(width,height, GL_RGBA);
@@ -864,13 +1015,15 @@ void ofApp::setupShaders(){
     ofClear(0,0,0,255);
     fbo3.end();
     
-    maskFbo4.begin();
-    ofClear(0,0,0,0);
-    maskFbo4.end();
-    
-    fbo4.begin();
-    ofClear(0,0,0,255);
-    fbo4.end();
+    if (getb("Layer4")) {
+        maskFbo4.begin();
+        ofClear(0,0,0,0);
+        maskFbo4.end();
+        
+        fbo4.begin();
+        ofClear(0,0,0,255);
+        fbo4.end();
+    }
     
     maskFbo5.begin();
     ofClear(0,0,0,0);
@@ -906,7 +1059,7 @@ void ofApp::updateShaders(){
     maskFbo1.begin();
     ofEnableAlphaBlending();
     
-    ofSetColor(255,255,255, 5); //geti("FadeEffect"));
+    ofSetColor(255,255,255, 25); //geti("FadeEffect"));
     
     if(isKinectOn){
 
@@ -920,33 +1073,44 @@ void ofApp::updateShaders(){
 
     }
     
-        //  Agentes
-        
+    //  Agentes
+    
+    //ofSetColor(255,255,255, 5);
+    
+    if(QueroQueros.enabled)
+    {
         ofPushStyle();
         ofSetColor(255, (int)25);
-        for(int i=0; i<boids.size(); i++)
+        for(int i=0; i<QueroQueros.boids.size(); i++)
         {
             for(int e = 0; e < 10; e++){
-                ofDrawEllipse(boids[i].pos.x, boids[i].pos.y, ofRandom(100),ofRandom(100));
+                ofDrawEllipse(QueroQueros.boids[i].pos.x, QueroQueros.boids[i].pos.y, ofRandom(100),ofRandom(100));
             }
         }
         ofPopStyle();
+    }
     
     ofSetColor(0,5);
     ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
 
-    ofSetColor(255, 25);
-    ge.drawEllipses();
+    if(box2dEllipses_enabled)
+    {
+        ofSetColor(255, 25);
+        ge.drawEllipses();
+    }
     
-    for(int i = 10; i > 0; i--){
-        
-        float factor = i;
-        
-        ofPushStyle();
-        ofSetColor(255, (int)25);
-        ofDrawEllipse(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.centroid.y, ofRandom(200),ofRandom(200));
-        ofPopStyle();
-        
+    if(userCentroidEllipse_enabled)
+    {
+        for(int i = 10; i > 0; i--){
+            
+            float factor = i;
+            
+            ofPushStyle();
+            ofSetColor(255, (int)25);
+            ofDrawEllipse(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.centroid.y, ofRandom(200),ofRandom(200));
+            ofPopStyle();
+            
+        }
     }
     maskFbo1.end();
     
@@ -999,7 +1163,7 @@ void ofApp::updateShaders(){
     ofClear(0, 0, 0, 255-geti("FadeEffect"));
     
     shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo2.getTextureReference(), 1 );
+    shader.setUniformTexture("maskTex", maskFbo2.getTexture(), 1 );
     
     
     layer2.draw(0,0);
@@ -1048,27 +1212,29 @@ void ofApp::updateShaders(){
     
     ////////////////// FBO     4
     /// MASK
-    maskFbo4.begin();
-    
-    ofEnableAlphaBlending();
-    ofSetColor(0,25);
-    ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
-    
-    ge.drawPolys();
-    
-    maskFbo4.end();
-    
-    //FBO
-    fbo4.begin();
-    ofClear(0, 0, 0, 255-geti("FadeEffect"));
-    
-    shader.begin();
-    shader.setUniformTexture("maskTex", maskFbo4.getTexture(), 1 );
-    
-    layer4.draw(0,0);
-    
-    shader.end();
-    fbo4.end();
+    if (getb("Layer4")) {
+        maskFbo4.begin();
+        
+        ofEnableAlphaBlending();
+        ofSetColor(0,25);
+        ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+        
+        ge.drawPolys();
+        
+        maskFbo4.end();
+        
+        //FBO
+        fbo4.begin();
+        ofClear(0, 0, 0, 255-geti("FadeEffect"));
+        
+        shader.begin();
+        shader.setUniformTexture("maskTex", maskFbo4.getTexture(), 1 );
+        
+        layer4.draw(0,0);
+        
+        shader.end();
+        fbo4.end();
+    }
     
     /// fim 4
     
@@ -1094,7 +1260,9 @@ void ofApp::updateShaders(){
         ofPushMatrix();
         
         ofTranslate(this->kinDepthAnalysis.centroid.x + ofRandom(-20,20), this->kinDepthAnalysis.centroid.y + ofRandom(-20,20));
-        ofScale(2.5, 2.5);
+        //ofScale(2.5, 2.5);
+        ofScale(ofMap(Ardour_state.meter, -40.0f, 3.0f, 0.1f, 4.75f, true), ofMap(Ardour_state.meter, -40.0f, 3.0f, 0.1f, 4.75f, true));
+        
         
         brushImg.draw(-125,-125);
         

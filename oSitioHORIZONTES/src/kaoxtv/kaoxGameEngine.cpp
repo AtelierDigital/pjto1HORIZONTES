@@ -33,6 +33,14 @@ void kaoxGameEngine::update(float x, float y){
     box2d.update();
 	box2d2.update();
     
+    //  [Brizo]
+    centroid_circles.set(0.0f, 0.0f);
+    for(int i=0; i<circles.size(); i++) {
+        centroid_circles.x += circles[i].getPosition().x;
+        centroid_circles.y += circles[i].getPosition().y;
+    }
+    centroid_circles /= (float)circles.size();
+    
 }
 
 void kaoxGameEngine::draw(){
@@ -404,7 +412,7 @@ void kaoxGameEngine::drawBoxes() {
     
     ofDisableBlendMode();
     
-    cout << "draw BOX : "<< boxes.size()<<endl;
+    //cout << "draw BOX : "<< boxes.size()<<endl;
     
     
     
@@ -596,6 +604,7 @@ void kaoxGameEngine::initHorizontes(int num){
     
     polyPoints.push_back(poly1);
     createPolyBox2D(poly1);
+    
     
     //    makeSolidEllipse(ofGetWidth()/2, ofGetHeight()/2, ofGetHeight()/6, 0.0, 0.0, 3.0);
     

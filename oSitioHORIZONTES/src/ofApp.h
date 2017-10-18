@@ -49,13 +49,25 @@ public:
     void setupControlPanel();
 
     //OSC
-	void receiveOSC();
+	void receiveOSC1();
     void receiveOSC_Ardour();
-    void sendOSC();
     void sendOSC_Ardour();
     int current_msg_string;
     string msg_strings[20];
     float timers[20];
+    
+    //  Ardour current state, updated via OSC
+    struct {
+        int bar = 0;
+        int beat = 0;
+        float meter = -40.0f;
+    } Ardour_state;
+    
+    //  Utilizando momentos da musica para modificar o estado da aplicacao
+    void obbeyMusicTimeCues();
+    
+    //  reinicia kaoxGameEngine, estado e posicao do audio
+    void reset();
     
     void updateBoids();
     
@@ -97,8 +109,11 @@ public:
 	ofxSyphonServer individualTextureSyphonServer;
 
     //OSC
-    ofxOscSender   sender;
-	ofxOscReceiver receiver;
+    ofxOscSender   sender_Ardour;
+	ofxOscReceiver receiver1;
+    ofxOscReceiver receiver_Ardour;
+    
+    bool audioPlaying;  //  TODO - Essa info tem que vir do Ardour
     
     ofImage mask;
 
@@ -139,10 +154,18 @@ public:
     
     kaoxGameEngine ge;
     
-    
+    //  [Brizo] - TODO: fazer isso de maneira mais elegante
+    //  Note que eles ainda dependem de sua camada estar habilitada
+    bool box2dEllipses_enabled;
+    bool userCentroidEllipse_enabled;
     
     //  Agentes
-    vector<Boid> boids;
+    struct
+    {
+        vector<Boid> boids;
+        bool enabled = false;
+    } QueroQueros;
+    
     
     
     //  ofxKinect
@@ -161,6 +184,14 @@ public:
         ofRectangle rectCoverage;
         float totalBlobsArea;
     } kinDepthAnalysis;
+    
+    //  Audio provisorio
+    /*ofSoundPlayer player;
+    ofSoundBuffer lastBuffer;
+    ofSoundStream soundStream;
+    float rms;
+    void audioOut(ofSoundBuffer &outBuffer);    //  callback do audio*/
+    
 };
 
 #endif

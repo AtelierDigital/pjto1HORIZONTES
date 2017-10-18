@@ -128,6 +128,9 @@ public:
     vector <ofColor> colorList;
     
     vector<vector<ofVec2f>> polyPoints;
+    
+    //  [Brizo] Estou usando como um descritor do estado deste sistema, no Limiar (proj1HORIZONTES), para controlar o pan do Ardour
+    ofVec3f centroid_circles;
 };
 
 #endif
