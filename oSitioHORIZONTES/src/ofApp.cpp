@@ -14,7 +14,7 @@
 void ofApp::setup() {
 
 	isSendingHands	= false;
-	isSendingOSC	= false;
+	isSendingOSC	= true;
 	isKinectOn		= false;
 	isSyphonOn		= true;
 	isDebugging		= false;
@@ -75,8 +75,6 @@ void ofApp::setup() {
         
         b.push_back(bi);
     }
-    
-    metaPixels.allocate(1920, 1080, 4);
     
     ge.setup();
     reset();    //  ja chama ge.initHorizontes(26);
@@ -205,19 +203,6 @@ void ofApp::update()
     
     updateBoids();
 
-    //updateBlobs_doKaue();
-    
-    /* NOTE - [Brizo] retirei a updateShaders abaixo, aparentemente duplicada.
-    o for de update dos blobs estah agora em updateBlobs_doKaue(); comentada acima
-    (nao estao sendo usados). "_doKaue" para nao confundir com os blobs da analise do OpenCV
-    updateShaders();
-
-    //updateBlobs
-    for (int i=0; i<numBlobs-1; ++i) {
-        b[i].update(i,b[i+1].getx(), b[i+1].gety(), ofGetMouseX(), ofGetMouseY());
-    }*/
-    
-    
     updateShaders();
     
     ge.update(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.centroid.y);
@@ -234,13 +219,6 @@ void ofApp::updateBoids()
         {
             QueroQueros.boids[i].run(QueroQueros.boids, this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y);  // passing the entire list of boids to each boid
         }
-    }
-}
-//--------------------------------------------------------------
-void ofApp::updateBlobs_doKaue()
-{
-    for (int i=0; i<numBlobs-1; ++i) {
-        b[i].update(i,b[i+1].getx(), b[i+1].gety(), ofGetMouseX(), ofGetMouseY());
     }
 }
 //--------------------------------------------------------------
@@ -346,22 +324,20 @@ void ofApp::draw(){
 	ofBackground(0);
 	
     glPushMatrix();
-    
-    
-//	glEnable (GL_DEPTH_TEST);
-
 	glDisable(GL_DEPTH_TEST);
     ofEnableAlphaBlending();
     
     ofSetColor(255);
     
+    float pllx, plly;
     
-    float pllx = (-this->kinDepthAnalysis.centroid.x + ofGetWidth()/2);
-    float plly = (-this->kinDepthAnalysis.centroid.y + ofGetHeight()/2);
+    if(isKinectOn) pllx = (-this->kinDepthAnalysis.centroid.x + ofGetWidth()/2);
+    else plly = (-ofGetMouseY() + ofGetHeight()/2);
+    if(isKinectOn) plly = (-this->kinDepthAnalysis.centroid.y + ofGetHeight()/2);
+    else plly = (-ofGetMouseX() + ofGetHeight()/2);
     
     //videoPB.draw(0, 0, ofGetWidth(), ofGetHeight());
     layer0.draw((pllx/100),(plly/100));
-    
     
     
     if (getb("Layer1")) {
@@ -370,7 +346,6 @@ void ofApp::draw(){
         fbo1.draw(0,0);
     
     }
-    
     
     if (getb("Layer2")) {
 
@@ -385,9 +360,6 @@ void ofApp::draw(){
         fbo2.draw(0+pllx/80.0,(plly/80));
         
     }
-
-    
-    
     if (getb("Layer3")) {
         
         glEnable(GL_BLEND_SRC_ALPHA);
@@ -400,8 +372,6 @@ void ofApp::draw(){
         fbo3.draw(-10+pllx/50.0,-10+(plly/50));
         
     }
-    
-    
     if (getb("Layer5")) {
 
     
@@ -415,7 +385,6 @@ void ofApp::draw(){
         fbo5.draw(-20+pllx/10.0,-10+(plly/20));
                 
     }
-    
     if (getb("Layer4")) {
 
         
@@ -448,28 +417,18 @@ void ofApp::draw(){
     }
     
     
-    
-//    if(isKinectOn){
-//        
-//        //chamar kaoxNI updateNI
-//        mask = kin.getUserMask();
-//        mask.draw(0, 0, ofGetWidth(), ofGetHeight());
-//        
-//    }
-    
-    
-    
 	ofDisableAlphaBlending();
     
     glPopMatrix();
     
-    //  ---- DEBUG da analise ([Brizo] nao achei a flag de Debug...)
-    /*ofPushMatrix();
-    ofSetColor(255);
-    ofDrawBitmapString(std::to_string(this->kinDepthAnalysis.totalBlobsArea), this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y-10);
-    ofDrawRectangle(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y, 20, 20);
-    ofPopMatrix();*/
-    //  -----
+    if(isDebugging){
+        ofPushMatrix();
+        ofSetColor(255);
+        ofDrawBitmapString(std::to_string(this->kinDepthAnalysis.totalBlobsArea), this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y-10);
+        ofDrawRectangle(this->kinDepthAnalysis.centroid.x, this->kinDepthAnalysis.rectCoverage.y, 20, 20);
+        ofPopMatrix();
+        
+    }
     
     if(isSyphonOn) mainOutputSyphonServer.publishScreen();
 	
@@ -481,9 +440,6 @@ void ofApp::draw(){
         
     }else    ofHideCursor();
 
-    
-    
-    
 }
 
 
@@ -497,23 +453,15 @@ void ofApp::updateKinect(){
     
     if(getb("StartKinect")){
         
-        //        kin.isInfrared = getb("IR");
-        //        kin.startKinect(geti("KinectSource"));
-        
         //  ofxKinect
         
         // enable depth->video image calibration
         kinect.setRegistration(true);
         
         kinect.init();
-        //kinect.init(true); // shows infrared instead of RGB video image
-        //kinect.init(false, false); // disable video image (faster fps)
         
         kinect.open();		// opens first available kinect
-        //kinect.open(1);	// open a kinect by id, starting with 0 (sorted by serial # lexicographically))
-        //kinect.open("A00362A08602047A");	// open a kinect using it's unique serial #
-        
-        // print the intrinsic IR sensor values
+
         if(kinect.isConnected()) {
                         ofLogNotice() << "sensor-emitter dist: " << kinect.getSensorEmitterDistance() << "cm";
                         ofLogNotice() << "sensor-camera dist:  " << kinect.getSensorCameraDistance() << "cm";
@@ -523,9 +471,6 @@ void ofApp::updateKinect(){
         
         //  OpenCV
         grayImage.allocate(kinect.width, kinect.height);
-        //grayThreshNear.allocate(kinect.width, kinect.height);
-        //grayThreshFar.allocate(kinect.width, kinect.height);
-        
         mask.allocate(kinect.width, kinect.height, OF_IMAGE_GRAYSCALE);
         
         isKinectOn = true;
@@ -555,19 +500,6 @@ void ofApp::updateKinect(){
         grayImage.getCvImage();
         
         //ofLogNotice() << "count = " << grayImage.countNonZeroInRegion(0, 0, kinect.width, kinect.height);
-        
-        /*
-         // we do two thresholds - one for the far plane and one for the near plane
-         // we then do a cvAnd to get the pixels which are a union of the two thresholds
-         if(bThreshWithOpenCV) {
-         grayThreshNear = grayImage;
-         grayThreshFar = grayImage;
-         //grayThreshNear.threshold(kinect.getNearClipping(), true);
-         //grayThreshFar.threshold(kinect.getFarClipping());
-         grayThreshNear.threshold(230, true);    //  hard-coding so para testes, usando o kinect bem perto de mim
-         grayThreshFar.threshold(70, trye); //  hard-coding so para testes, usando o kinect bem perto de mim
-         cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImage.getCvImage(), NULL);
-         } else {*/
         
         // Estou mantendo os valores intermediarios ao inves de satura-los (TODO - vamos saturar ou nao?)
         ofPixels & pix = grayImage.getPixels();
@@ -623,26 +555,12 @@ void ofApp::updateKinect(){
         //ofLogNotice() << "centroid = " << centroid << ", rectCoverage = " << rectCoverage;
     }
     
-    /*SimpleOpenNI
-    if(isKinectOn)
-    {
-        //        kin.filterFactor = getf("FilterFactor");
-        //        kin.nearThreshold = geti("NearThreshold");
-        //        kin.farThreshold = geti("FarThreshold");
-        //
-        //        kin.isTracking = getb("TrackingUser");
-        //        kin.isTrackingHands = getb("TrackingHands");
-        //
-        //        if(geti("KinectDraw") > 2)  kin.isMasking = true;
-        //        else                        kin.isMasking = false;
+    if(isKinectOn==false) {
+        
+        this->kinDepthAnalysis.centroid.x = ofGetMouseX();
+        this->kinDepthAnalysis.centroid.y = ofGetMouseY();
+        
     }
-    
-    
-    if(isKinectOn){
-        //chamar kaoxNI updateNI
-        //        kin.updateNI();
-    }
-    */
 }
 
 
@@ -828,7 +746,7 @@ void ofApp::keyReleased(int key)
         case 'c':   box2dEllipses_enabled = !box2dEllipses_enabled; break;
             
             
-            //case ' ': ge.initHorizontes(26);  break;
+        case 'k': isKinectOn = !isKinectOn; break;
         case 'p':
             mm.setAddress("/transport_play");
             sender_Ardour.sendMessage(mm, false);
@@ -838,7 +756,9 @@ void ofApp::keyReleased(int key)
             sender_Ardour.sendMessage(mm, false);
             break;
             
-        //case '0':   setb("ShowPanel", ! getb("ShowPanel")); break;
+        case '=':   setb("ShowPanel", ! getb("ShowPanel")); break;
+            
+        case ' ':
         case '0':
             state_music = !state_music;
             reset();

@@ -881,14 +881,14 @@ void kaoxGameEngine::makeForce(int pt, float _power, bool _atraction){
 }
 void kaoxGameEngine::makeWalls(float margin){
 	
-	if(hasWalls) { //se já tem walls reinicio sem walls
-        
-		hasWalls = false;
-		walls.clear();
-		resetBodies();
-		return;
-        
-	}
+//	if(hasWalls) { //se já tem walls reinicio sem walls
+//        
+//		hasWalls = false;
+//		walls.clear();
+//		resetBodies();
+//		return;
+//        
+//	}
     
 	hasWalls = true;
     

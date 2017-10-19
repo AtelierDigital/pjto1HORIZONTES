@@ -71,9 +71,6 @@ public:
     
     void updateBoids();
     
-    void updateBlobs_doKaue();   //  nao estao sendo usados no momento...
-	
-    
     ///new SHADERS!!!
     void setupShaders();
     void updateShaders();
