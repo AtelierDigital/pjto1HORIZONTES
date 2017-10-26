@@ -5,13 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>ABC437ED-D040-4AC5-930C-C3BDDFA88EE8</string>
+	<string>C924AEE4-E2DC-4414-BF89-CCF4D847E296</string>
 	<key>IDESourceControlProjectName</key>
 	<string>oSitioHORIZONTES</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>561DBA788C32F8435EA4D86F023E01CF00D9146B</key>
 		<string>https://github.com/AtelierDigital/pjto1HORIZONTES.git</string>
+		<key>903165F9FDCB952EAE50578862E56DA722F43224</key>
+		<string>https://github.com/vanderlin/ofxBox2d.git</string>
+		<key>E1D7CE75067CCCDCE3CA7F133D695D7FCD43174A</key>
+		<string>https://github.com/genekogan/ofxTouchOsc.git</string>
+		<key>F4CCB893AFADB97238A965FD2F28717F1CAAE613</key>
+		<string>https://github.com/astellato/ofxSyphon.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>oSitioHORIZONTES/oSitioHORIZONTES.xcodeproj</string>
@@ -19,6 +25,12 @@
 	<dict>
 		<key>561DBA788C32F8435EA4D86F023E01CF00D9146B</key>
 		<string>../../..</string>
+		<key>903165F9FDCB952EAE50578862E56DA722F43224</key>
+		<string>../../../../../addons/ofxBox2d</string>
+		<key>E1D7CE75067CCCDCE3CA7F133D695D7FCD43174A</key>
+		<string>../../../../../addons/ofxTouchOsc</string>
+		<key>F4CCB893AFADB97238A965FD2F28717F1CAAE613</key>
+		<string>../../../../../addons/ofxSyphon</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/AtelierDigital/pjto1HORIZONTES.git</string>
@@ -28,6 +40,30 @@
 	<string>561DBA788C32F8435EA4D86F023E01CF00D9146B</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>903165F9FDCB952EAE50578862E56DA722F43224</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxBox2d</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F4CCB893AFADB97238A965FD2F28717F1CAAE613</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxSyphon</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E1D7CE75067CCCDCE3CA7F133D695D7FCD43174A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxTouchOsc</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
