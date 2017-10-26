@@ -11,10 +11,10 @@
     <val_0>0.000000000</val_0>
 </KinectSource>
 <NearThreshold>
-    <val_0>500.000000000</val_0>
+    <val_0>100.000000000</val_0>
 </NearThreshold>
 <FarThreshold>
-    <val_0>1000.000000000</val_0>
+    <val_0>5530.000000000</val_0>
 </FarThreshold>
 <FilterFactor>
     <val_0>0.100000001</val_0>
@@ -34,3 +34,51 @@
 <ShowPanel>
     <val_0>1.000000000</val_0>
 </ShowPanel>
+<Background>
+    <val_0>1.000000000</val_0>
+</Background>
+<Layer1>
+    <val_0>1.000000000</val_0>
+</Layer1>
+<Layer2>
+    <val_0>1.000000000</val_0>
+</Layer2>
+<Layer3>
+    <val_0>1.000000000</val_0>
+</Layer3>
+<Layer4>
+    <val_0>0.000000000</val_0>
+</Layer4>
+<Layer5>
+    <val_0>1.000000000</val_0>
+</Layer5>
+<Layer6>
+    <val_0>1.000000000</val_0>
+</Layer6>
+<SendOSC>
+    <val_0>1.000000000</val_0>
+</SendOSC>
+<noiseIntensity>
+    <val_0>0.000000000</val_0>
+</noiseIntensity>
+<noiseVelocity>
+    <val_0>0.000000000</val_0>
+</noiseVelocity>
+<shaderValue1>
+    <val_0>0.500000000</val_0>
+</shaderValue1>
+<shaderValue2>
+    <val_0>0.500000000</val_0>
+</shaderValue2>
+<shaderValue3>
+    <val_0>0.500000000</val_0>
+</shaderValue3>
+<shaderValue4>
+    <val_0>0.500000000</val_0>
+</shaderValue4>
+<shaderScale>
+    <val_0>0.000000000</val_0>
+</shaderScale>
+<useNoiseShader>
+    <val_0>1.000000000</val_0>
+</useNoiseShader>

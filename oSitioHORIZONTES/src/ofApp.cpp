@@ -130,8 +130,8 @@ void ofApp::setupControlPanel() {
     
     panel.addMultiToggle("KinectSource", 0, variadic("live")("recent")("calib")("swap")("menuDir")("menuInf")("misc"));    
     
-    panel.addSlider("NearThreshold", 500, 100, 3000);
-    panel.addSlider("FarThreshold", 6000, 200, 8000);
+    panel.addSlider("NearThreshold", 100, 100, 3000);
+    panel.addSlider("FarThreshold", 5520, 200, 8000);    
     panel.addSlider("FilterFactor", .1, -2, 2);
 
     panel.addToggle("TrackingHands", true);
@@ -266,14 +266,14 @@ void ofApp::obbeyMusicTimeCues()
         else if(Ardour_state.bar == 106)
         {
             QueroQueros.enabled = false;
-            setb("Layer4", true);
+            setb("Layer4", false);
         }
         else if(Ardour_state.bar == 150)
         {
             setb("Layer1", false);
             setb("Layer2", true);
             setb("Layer3", true);
-            setb("Layer4", false);
+            //setb("Layer4", false);
             setb("Layer5", true);
         }
         else if(Ardour_state.bar == 172 && Ardour_state.beat > 2)
@@ -845,6 +845,9 @@ void ofApp::keyReleased(int key)
         break;
             
         case 's':   panel.saveSettings();   break;
+            
+        case 'n': setf("FarThreshold", getf("FarThreshold")-20); break;
+        case 'm': setf("FarThreshold", getf("FarThreshold")+20); break;
     }
     
     
@@ -852,6 +855,7 @@ void ofApp::keyReleased(int key)
     cout << "frame rate:" << ofGetFrameRate() << "   mouseX:" << ofGetMouseX() << endl;
     cout << ge.centroid_circles.x << " " << ge.centroid_circles.x/(float)ofGetWidth();
     cout << "bar | beat: " << Ardour_state.bar << " | " << Ardour_state.beat << endl;
+    cout << "state_music = " << state_music << std::endl;
     
     /*  Anotando comandos OSC para o Ardour...
      goto_start
